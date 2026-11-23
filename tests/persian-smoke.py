@@ -21,14 +21,19 @@ services = fetch('/services/').decode('utf-8')
 sample = fetch('/sample-page/').decode('utf-8')
 checks = {
     'Persian RTL document': 'lang="fa-IR" dir="rtl"' in home,
-    'Persian home content': 'به نیو استودیو خوش آمدید' in home,
-    'Editorial stylesheet': 'assets/css/editorial.css?ver=1.3.0' in home,
+    'Persian home content': 'استودیو ناخن / زیبایی در جزئیات' in home,
+    'Editorial stylesheet': 'assets/css/lune.css?ver=1.4.0' in home,
     'Persian service cards': 'مانیکور کلاسیک' in services,
     'Persian WordPress starter post': 'به مجله نیو استودیو خوش آمدید' in blog and 'Hello world!' not in blog,
     'Persian WordPress sample page': 'صفحه نمونه' in sample and 'This is an example page.' not in sample,
     'Persian default category': 'دسته‌بندی نشده' in blog and '>Uncategorized<' not in blog,
     'Menu accessibility fallback': 'aria-label="باز کردن فهرست"' in home,
-    'Editorial CSS asset': bool(fetch('/wp-content/themes/nue-studio/assets/css/editorial.css')),
+    'Editorial CSS asset': bool(fetch('/wp-content/themes/nue-studio/assets/css/lune.css')),
+    'Service rows': 'lune-service-row' in home,
+    'Four-step process': 'lune-steps' in home,
+    'Pricing cards': 'lune-price-card' in home,
+    'Six homepage questions': home.count('<details class="wp-block-details') == 6,
+    'Booking banner': 'رزرو آنلاین' in home,
     'Local Persian display font': bool(fetch('/wp-content/themes/nue-studio/assets/fonts/noto-naskh-arabic-arabic-wght-normal.woff2')),
 }
 failed = [name for name, ok in checks.items() if not ok]

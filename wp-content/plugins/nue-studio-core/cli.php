@@ -20,7 +20,7 @@ class Nue_CLI_Command {
         WP_CLI::line( 'Nue starter home page: ' . ( ( $starter = get_page_by_path( 'home' ) ) ? 'ID ' . $starter->ID : 'not found' ) );
         if ( get_template() !== 'nue-studio' ) { WP_CLI::warning( 'Nue Studio is not the active theme; the design cannot appear until it is activated.' ); }
         if ( ! $home || ! $starter || $home->ID !== $starter->ID || 'page' !== get_option( 'show_on_front' ) ) { WP_CLI::warning( 'The Nue starter page is not selected as the front page. Review Settings > Reading.' ); }
-        if ( ! is_readable( get_theme_root() . '/nue-studio/assets/css/editorial.css' ) ) { WP_CLI::warning( 'The new stylesheet is missing from the mounted theme directory.' ); }
+        if ( ! is_readable( get_theme_root() . '/nue-studio/assets/css/lune.css' ) ) { WP_CLI::warning( 'The new stylesheet is missing from the mounted theme directory.' ); }
         $overrides = get_posts( array( 'post_type' => array( 'wp_template', 'wp_template_part' ), 'post_status' => 'publish', 'posts_per_page' => -1, 'tax_query' => array( array( 'taxonomy' => 'wp_theme', 'field' => 'name', 'terms' => 'nue-studio' ) ) ) );
         if ( $overrides ) {
             WP_CLI::warning( 'Saved Site Editor templates or parts can override updated theme files. Review them before resetting anything:' );

@@ -20,7 +20,7 @@ function nue_fa_faq( $short = false ) {
     }
     return $html;
 }
-function nue_page_content() {
+function nue_previous_page_content() {
     $hero = '<!-- wp:group {"className":"hero","layout":{"type":"constrained"}} --><div class="wp-block-group hero"><!-- wp:columns {"className":"hero-columns","verticalAlignment":"center"} --><div class="wp-block-columns are-vertically-aligned-center hero-columns"><!-- wp:column {"verticalAlignment":"center","width":"48%"} --><div class="wp-block-column is-vertically-aligned-center" style="flex-basis:48%">' . nue_p( 'به نیو استودیو خوش آمدید ✳', 'eyebrow' ) . nue_h( 'زیبایی در <em>دستان شما</em>', 1 ) . nue_p( 'جایی برای رسیدگی به خودتان، زیبایی ناخن‌ها و تجربه لحظه‌ای آرام. مانیکور، پدیکور و طراحی ناخن، با توجه به سلیقه شما.', 'hero-copy' ) . nue_link( '/booking/', 'رزرو نوبت' ) . nue_p( 'ناخن‌های زیبا، حال خوب ✳', 'hero-note' ) . '</div><!-- /wp:column --><!-- wp:column {"width":"52%"} --><div class="wp-block-column" style="flex-basis:52%">' . nue_image( 'hero.jpg', 'ناخن‌های بادامی با لاک سفید شیری', 'hero-image' ) . '</div><!-- /wp:column --></div><!-- /wp:columns --></div><!-- /wp:group -->';
     $intro = '<!-- wp:columns {"className":"intro-split","verticalAlignment":"center"} --><div class="wp-block-columns are-vertically-aligned-center intro-split"><!-- wp:column --><div class="wp-block-column">' . nue_image( 'studio.jpg', 'مانیکور صورتی ملایم با درخشش ظریف', 'intro-image' ) . '</div><!-- /wp:column --><!-- wp:column --><div class="wp-block-column">' . nue_p( 'کمی بیشتر درباره ما ✳', 'eyebrow' ) . nue_h( 'لحظه‌ای زیبا، <em>فقط برای شما</em>' ) . nue_p( 'به فضایی خوش آمدید که زیبایی در آن با آرامش همراه است. در نیو استودیو باور داریم همین لحظه‌های کوچک می‌توانند حال روزمان را تغییر دهند.' ) . nue_p( 'از مراقبت ناخن تا ظریف‌ترین جزئیات طراحی، همه‌چیز با توجه به سلیقه و راحتی شما انجام می‌شود.' ) . nue_link( '/about/', 'آشنایی با استودیو' ) . '</div><!-- /wp:column --></div><!-- /wp:columns -->';
     $home = $hero . nue_group( $intro, 'content-section intro-section' )
@@ -79,7 +79,10 @@ function nue_translate_starter_terms() {
 }
 function nue_starter_normalize( $content ) {
     // The first release used these image descriptions; accept either unedited version.
-    return str_replace( array( 'A sheer nude manicure in warm natural light', 'A manicure in progress in a warm, serene studio', 'A thoughtful manicure ritual' ), array( 'Milky white almond-shaped nails', 'A soft pink shimmer manicure', 'Soft pink shimmering manicure' ), trim( $content ) );
+    $content = str_replace( array( 'A sheer nude manicure in warm natural light', 'A manicure in progress in a warm, serene studio', 'A thoughtful manicure ritual' ), array( 'Milky white almond-shaped nails', 'A soft pink shimmer manicure', 'Soft pink shimmering manicure' ), trim( $content ) );
+    // KSES may add a harmless space before a self-closing image tag when WP-CLI
+    // runs without an interactive user. Do not treat that serialization as an edit.
+    return preg_replace( '/\s+\/>/', '/>', $content );
 }
 /** Translate only the untouched single-site WordPress starter post. */
 function nue_translate_wordpress_starter_post() {
@@ -98,12 +101,14 @@ function nue_translate_wordpress_starter_page() {
     return ! is_wp_error( $updated );
 }
 function nue_migrate_persian_starters() {
-    $updated = 0; $skipped = 0; $english = nue_english_page_content(); $persian = nue_page_content();
+    $updated = 0; $skipped = 0; $english = nue_english_page_content(); $persian = nue_page_content(); $previous = nue_previous_page_content();
     foreach ( $persian as $slug => $data ) {
         $page = get_page_by_path( $slug );
         if ( ! $page || ! isset( $english[ $slug ] ) ) { continue; }
-        if ( $page->post_title === $data[0] && trim( $page->post_content ) === trim( $data[1] ) ) { continue; }
-        if ( $page->post_title !== $english[ $slug ][0] || nue_starter_normalize( $page->post_content ) !== nue_starter_normalize( $english[ $slug ][1] ) ) { $skipped++; continue; }
+        if ( $page->post_title === $data[0] && nue_starter_normalize( $page->post_content ) === nue_starter_normalize( $data[1] ) ) { continue; }
+        $matches_english = $page->post_title === $english[ $slug ][0] && nue_starter_normalize( $page->post_content ) === nue_starter_normalize( $english[ $slug ][1] );
+        $matches_previous = isset( $previous[ $slug ] ) && $page->post_title === $previous[ $slug ][0] && nue_starter_normalize( $page->post_content ) === nue_starter_normalize( $previous[ $slug ][1] );
+        if ( ! $matches_english && ! $matches_previous ) { $skipped++; continue; }
         // Preserve URLs, featured images, page IDs and existing revisions.
         $result = wp_update_post( array( 'ID' => $page->ID, 'post_title' => $data[0], 'post_content' => $data[1] ), true );
         if ( ! is_wp_error( $result ) ) { $updated++; }

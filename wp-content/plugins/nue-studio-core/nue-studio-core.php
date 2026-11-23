@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Nue Studio Core
  * Description: Studio content types, editable details, booking and site components for Nue Studio.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Text Domain: nue-studio-core
@@ -13,6 +13,7 @@ require_once NUE_CORE_DIR . 'content.php';
 require_once NUE_CORE_DIR . 'components.php';
 require_once NUE_CORE_DIR . 'setup.php';
 require_once NUE_CORE_DIR . 'persian.php';
+require_once NUE_CORE_DIR . 'design.php';
 if ( defined( 'WP_CLI' ) && WP_CLI ) { require_once NUE_CORE_DIR . 'cli.php'; }
 register_activation_hook( __FILE__, 'nue_activate' );
 add_action( 'admin_menu', function () { add_options_page( 'Nue Studio Settings', 'Nue Studio', 'manage_options', 'nue-studio', 'nue_settings_page' ); } );

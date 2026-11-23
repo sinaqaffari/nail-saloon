@@ -1,6 +1,6 @@
 (function (blocks, element, serverSideRender) {
   'use strict';
-  var titles = {services:'کارت‌های خدمات', pricing:'قیمت خدمات', gallery:'گالری طراحی ناخن', team:'پروفایل تیم', testimonials:'دیدگاه‌ها', booking:'سامانه رزرو Acuity', 'contact-info':'اطلاعات تماس استودیو', 'contact-form':'فرم تماس', detail:'جزئیات محتوا', share:'اشتراک‌گذاری مطلب', 'related-posts':'مطالب مرتبط', 'featured-post':'مطلب برگزیده', 'gift-link':'پیوند خرید کارت هدیه'};
+  var titles = {services:'کارت‌های خدمات', pricing:'قیمت خدمات', gallery:'گالری طراحی ناخن', team:'پروفایل تیم', testimonials:'دیدگاه‌ها', booking:'سامانه رزرو Acuity', 'contact-info':'اطلاعات تماس استودیو', 'contact-form':'فرم تماس', detail:'جزئیات محتوا', share:'اشتراک‌گذاری مطلب', 'related-posts':'مطالب مرتبط', 'featured-post':'مطلب برگزیده', 'gift-link':'پیوند خرید کارت هدیه', 'service-menu':'فهرست خدمات', 'pricing-preview':'کارت‌های قیمت', 'review-carousel':'نمایش دیدگاه‌ها'};
   Object.keys(titles).forEach(function (name) {
     blocks.registerBlockType('nue/' + name, {
       apiVersion: 2, title: titles[name], category: 'widgets', icon: 'heart',

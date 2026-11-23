@@ -8,32 +8,32 @@
         {
           "slug": "ivory",
           "name": "Ivory",
-          "color": "#f2eee6"
+          "color": "#fdfcfb"
         },
         {
           "slug": "ink",
           "name": "Ink",
-          "color": "#211a18"
+          "color": "#1c1917"
         },
         {
           "slug": "chocolate",
           "name": "Chocolate",
-          "color": "#302321"
+          "color": "#9e4a5a"
         },
         {
           "slug": "gold",
           "name": "Gold",
-          "color": "#a88b65"
+          "color": "#c2697a"
         },
         {
           "slug": "beige",
           "name": "Beige",
-          "color": "#dcc5ad"
+          "color": "#f0d4d9"
         },
         {
           "slug": "sand",
           "name": "Sand",
-          "color": "#e8ded2"
+          "color": "#ede8e0"
         }
       ]
     },
@@ -191,7 +191,7 @@
       },
       "button": {
         "border": {
-          "radius": "100px"
+          "radius": "0px"
         },
         "color": {
           "background": "var:preset|color|chocolate",
@@ -200,8 +200,8 @@
         "typography": {
           "fontSize": "0.75rem",
           "fontWeight": "600",
-          "letterSpacing": "0.12em",
-          "textTransform": "uppercase"
+          "letterSpacing": "0",
+          "textTransform": "none"
         },
         "spacing": {
           "padding": {

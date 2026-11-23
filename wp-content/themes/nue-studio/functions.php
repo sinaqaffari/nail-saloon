@@ -10,7 +10,9 @@ add_action( 'wp_enqueue_scripts', function () {
     $version = wp_get_theme()->get( 'Version' );
     wp_enqueue_style( 'nue-studio', get_template_directory_uri() . '/assets/css/site.css', array(), $version );
     wp_enqueue_style( 'nue-editorial', get_template_directory_uri() . '/assets/css/editorial.css', array( 'nue-studio' ), $version );
+    wp_enqueue_style( 'nue-lune', get_template_directory_uri() . '/assets/css/lune.css', array( 'nue-editorial' ), $version );
     wp_enqueue_script( 'nue-studio', get_template_directory_uri() . '/assets/js/site.js', array(), $version, true );
+    wp_enqueue_script( 'nue-lune', get_template_directory_uri() . '/assets/js/lune.js', array(), $version, true );
 } );
 add_action( 'init', function () { register_block_pattern_category( 'nue-studio', array( 'label' => __( 'Nue Studio', 'nue-studio' ) ) ); } );
 

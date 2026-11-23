@@ -1,8 +1,8 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 add_action( 'init', function () {
-    wp_register_script( 'nue-block-editor', plugins_url( 'editor.js', __FILE__ ), array( 'wp-blocks', 'wp-element', 'wp-server-side-render', 'wp-components' ), '1.2.0', true );
-    $blocks = array( 'services', 'pricing', 'gallery', 'team', 'testimonials', 'booking', 'contact-info', 'contact-form', 'detail', 'share', 'related-posts', 'featured-post', 'gift-link' );
+    wp_register_script( 'nue-block-editor', plugins_url( 'editor.js', __FILE__ ), array( 'wp-blocks', 'wp-element', 'wp-server-side-render', 'wp-components' ), '1.4.0', true );
+    $blocks = array( 'services', 'pricing', 'gallery', 'team', 'testimonials', 'booking', 'contact-info', 'contact-form', 'detail', 'share', 'related-posts', 'featured-post', 'gift-link', 'service-menu', 'pricing-preview', 'review-carousel' );
     foreach ( $blocks as $block ) {
         register_block_type( 'nue/' . $block, array( 'api_version' => 2, 'editor_script' => 'nue-block-editor', 'render_callback' => 'nue_render_' . str_replace( '-', '_', $block ), 'attributes' => array( 'limit' => array( 'type' => 'number', 'default' => -1 ) ) ) );
     }
@@ -92,4 +92,41 @@ function nue_render_featured_post() {
     if ( ! $posts ) { return ''; }
     $p = $posts[0];
     return '<article class="featured-post"><div>' . ( has_post_thumbnail( $p ) ? get_the_post_thumbnail( $p, 'large', array( 'loading' => 'lazy' ) ) : '' ) . '</div><div><p class="eyebrow">مطلب برگزیده ✳</p><h2><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . '</a></h2><p>' . esc_html( get_the_excerpt( $p ) ) . '</p><a class="text-link" href="' . esc_url( get_permalink( $p ) ) . '">خواندن مطلب ↗</a></div></article>';
+}
+
+/** A compact editorial menu rendered from the same editable service records. */
+function nue_render_service_menu( $attributes ) {
+    $posts = nue_query( 'nue_service', $attributes['limit'] ?? 8 );
+    if ( ! $posts ) { return '<p>خدمات پس از ثبت در پیشخوان اینجا نمایش داده می‌شوند.</p>'; }
+    $html = '<div class="lune-service-list">'; $index = 0;
+    foreach ( $posts as $post ) {
+        $index++;
+        $html .= '<article class="lune-service-row"><span class="lune-row-number">' . esc_html( strtr( str_pad( (string) $index, 2, '0', STR_PAD_LEFT ), array( '0'=>'۰', '1'=>'۱', '2'=>'۲', '3'=>'۳', '4'=>'۴', '5'=>'۵', '6'=>'۶', '7'=>'۷', '8'=>'۸', '9'=>'۹' ) ) ) . '</span><div class="lune-row-main"><h3><a href="' . esc_url( get_permalink( $post ) ) . '">' . esc_html( get_the_title( $post ) ) . '</a></h3><p>' . esc_html( nue_meta( $post->ID, 'short_description', 'برای دریافت جزئیات با استودیو تماس بگیرید.' ) ) . '</p></div><div class="lune-row-meta"><span>' . esc_html( nue_meta( $post->ID, 'duration', 'مدت با هماهنگی' ) ) . '</span><span>' . esc_html( nue_meta( $post->ID, 'price', 'قیمت با هماهنگی' ) ) . '</span></div><a class="lune-row-arrow" href="' . esc_url( get_permalink( $post ) ) . '" aria-label="' . esc_attr( 'جزئیات ' . get_the_title( $post ) ) . '">←</a></article>';
+    }
+    return $html . '</div>';
+}
+/** Category cards use real services and prices, not invented pricing tiers. */
+function nue_render_pricing_preview() {
+    $terms = get_terms( array( 'taxonomy' => 'nue_service_category', 'hide_empty' => true ) );
+    if ( is_wp_error( $terms ) || ! $terms ) { return '<p>قیمت‌ها پس از ثبت خدمات در این بخش نمایش داده می‌شوند.</p>'; }
+    $html = '<div class="lune-price-cards">'; $shown = 0;
+    foreach ( $terms as $term ) {
+        if ( $shown >= 3 ) { break; }
+        $posts = get_posts( array( 'post_type' => 'nue_service', 'posts_per_page' => 4, 'post_status' => 'publish', 'tax_query' => array( array( 'taxonomy' => 'nue_service_category', 'field' => 'term_id', 'terms' => $term->term_id ) ) ) );
+        if ( ! $posts ) { continue; }
+        $html .= '<section class="lune-price-card' . ( 1 === $shown ? ' is-featured' : '' ) . '"><p class="lune-price-label">فهرست خدمات</p><h3>' . esc_html( $term->name ) . '</h3><ul>';
+        foreach ( $posts as $post ) { $html .= '<li><a href="' . esc_url( get_permalink( $post ) ) . '">' . esc_html( get_the_title( $post ) ) . '</a><span>' . esc_html( nue_meta( $post->ID, 'price', 'با هماهنگی' ) ) . '</span></li>'; }
+        $html .= '</ul><a class="text-link" href="' . esc_url( home_url( '/pricing/' ) ) . '">جزئیات قیمت‌ها ←</a></section>'; $shown++;
+    }
+    return $html . '</div>';
+}
+/** Reviews remain visible without JavaScript; controls are enabled progressively. */
+function nue_render_review_carousel() {
+    $posts = nue_query( 'nue_testimonial', 8 );
+    if ( ! $posts ) { return '<p>دیدگاه‌های واقعی پس از دریافت در این بخش منتشر می‌شوند.</p>'; }
+    $html = '<div class="lune-review-carousel" aria-label="دیدگاه‌های همراهان"><div class="lune-review-slides">';
+    foreach ( $posts as $post ) {
+        $html .= '<blockquote class="lune-review-slide"><p>«' . esc_html( wp_strip_all_tags( $post->post_content ) ) . '»</p><cite>' . esc_html( nue_meta( $post->ID, 'customer_name', get_the_title( $post ) ) ) . '</cite>' . ( 'yes' === strtolower( nue_meta( $post->ID, 'sample' ) ) ? '<small>دیدگاه نمونه است و نظر واقعی مشتری نیست.</small>' : '' ) . '</blockquote>';
+    }
+    return $html . '</div><div class="lune-review-controls" hidden><button type="button" data-review-prev aria-label="دیدگاه قبلی">→</button><span class="lune-review-count" aria-live="polite"></span><button type="button" data-review-next aria-label="دیدگاه بعدی">←</button><button type="button" class="lune-review-pause" data-review-pause aria-pressed="false">توقف پخش</button></div></div>';
 }
