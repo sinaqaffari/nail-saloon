@@ -1,0 +1,62 @@
+# Local WordPress stack. Copy .env.example to .env and set both DB passwords.
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-nue_studio}
+      MARIADB_USER: ${MARIADB_USER:-nue_user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?Set MARIADB_PASSWORD in .env}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?Set MARIADB_ROOT_PASSWORD in .env}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  wordpress:
+    image: ${WORDPRESS_IMAGE:-wordpress:php8.3-apache}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${WORDPRESS_BIND_ADDRESS:-127.0.0.1}:${WORDPRESS_PORT:-8080}:80"
+    environment: &wordpress_environment
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MARIADB_DATABASE:-nue_studio}
+      WORDPRESS_DB_USER: ${MARIADB_USER:-nue_user}
+      WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD:?Set MARIADB_PASSWORD in .env}
+      # Gutenberg and Site Editor remain available; PHP file editing is disabled.
+      WORDPRESS_CONFIG_EXTRA: |
+        define('DISALLOW_FILE_EDIT', true);
+    volumes: &wordpress_volumes
+      - wordpress_data:/var/www/html
+      - ./wp-content/themes/nue-studio:/var/www/html/wp-content/themes/nue-studio:ro
+      - ./wp-content/plugins/nue-studio-core:/var/www/html/wp-content/plugins/nue-studio-core:ro
+
+  # Optional: docker compose --profile tools run --rm wpcli <command>
+  # Use after the WordPress container has initialized its files and database.
+  wpcli:
+    image: wordpress:cli-php8.3
+    profiles: ["tools"]
+    user: "33:33"
+    working_dir: /var/www/html
+    entrypoint: ["wp"]
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    environment:
+      <<: *wordpress_environment
+      HOME: /tmp
+      WP_CLI_CACHE_DIR: /tmp/wp-cli-cache
+    volumes: *wordpress_volumes
+
+volumes:
+  db_data:
+  wordpress_data:

@@ -1,0 +1,185 @@
+{
+  "$schema": "https://schemas.wp.org/wp/6.4/theme.json",
+  "version": 2,
+  "settings": {
+    "appearanceTools": true,
+    "color": {
+      "palette": [
+        {
+          "slug": "ivory",
+          "name": "Ivory",
+          "color": "#f4f0e8"
+        },
+        {
+          "slug": "ink",
+          "name": "Ink",
+          "color": "#211a18"
+        },
+        {
+          "slug": "chocolate",
+          "name": "Chocolate",
+          "color": "#291d1a"
+        },
+        {
+          "slug": "gold",
+          "name": "Gold",
+          "color": "#a88b65"
+        },
+        {
+          "slug": "beige",
+          "name": "Beige",
+          "color": "#dcc5ad"
+        },
+        {
+          "slug": "sand",
+          "name": "Sand",
+          "color": "#eae2d8"
+        }
+      ]
+    },
+    "layout": {
+      "contentSize": "1200px",
+      "wideSize": "1400px"
+    },
+    "typography": {
+      "fluid": true,
+      "fontFamilies": [
+        {
+          "fontFamily": "\"Cormorant Garamond\", Georgia, serif",
+          "slug": "editorial",
+          "name": "Editorial Serif",
+          "fontFace": [
+            {
+              "fontFamily": "Cormorant Garamond",
+              "fontStyle": "normal",
+              "fontWeight": "300 700",
+              "src": [
+                "file:./assets/fonts/cormorant-garamond-latin-wght-normal.woff2"
+              ]
+            },
+            {
+              "fontFamily": "Cormorant Garamond",
+              "fontStyle": "italic",
+              "fontWeight": "300 700",
+              "src": [
+                "file:./assets/fonts/cormorant-garamond-latin-wght-italic.woff2"
+              ]
+            }
+          ]
+        },
+        {
+          "fontFamily": "\"DM Sans\", Arial, sans-serif",
+          "slug": "sans",
+          "name": "Clean Sans",
+          "fontFace": [
+            {
+              "fontFamily": "DM Sans",
+              "fontStyle": "normal",
+              "fontWeight": "100 1000",
+              "src": [
+                "file:./assets/fonts/dm-sans-latin-wght-normal.woff2"
+              ]
+            },
+            {
+              "fontFamily": "DM Sans",
+              "fontStyle": "italic",
+              "fontWeight": "100 1000",
+              "src": [
+                "file:./assets/fonts/dm-sans-latin-wght-italic.woff2"
+              ]
+            }
+          ]
+        }
+      ],
+      "fontSizes": [
+        {
+          "slug": "small",
+          "size": "0.8rem",
+          "name": "Small"
+        },
+        {
+          "slug": "normal",
+          "size": "1rem",
+          "name": "Normal"
+        },
+        {
+          "slug": "large",
+          "size": "1.35rem",
+          "name": "Large"
+        },
+        {
+          "slug": "display",
+          "size": "clamp(3rem, 6vw, 6.5rem)",
+          "name": "Display"
+        }
+      ]
+    },
+    "spacing": {
+      "units": [
+        "px",
+        "rem",
+        "%",
+        "vw"
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var:preset|color|ivory",
+      "text": "var:preset|color|ink"
+    },
+    "typography": {
+      "fontFamily": "var:preset|font-family|sans",
+      "lineHeight": "1.65"
+    },
+    "elements": {
+      "heading": {
+        "typography": {
+          "fontFamily": "var:preset|font-family|editorial",
+          "fontWeight": "400",
+          "lineHeight": "1.08"
+        }
+      },
+      "link": {
+        "color": {
+          "text": "inherit"
+        }
+      },
+      "button": {
+        "border": {
+          "radius": "100px"
+        },
+        "color": {
+          "background": "var:preset|color|chocolate",
+          "text": "var:preset|color|ivory"
+        },
+        "typography": {
+          "fontSize": "0.75rem",
+          "fontWeight": "600",
+          "letterSpacing": "0.12em",
+          "textTransform": "uppercase"
+        },
+        "spacing": {
+          "padding": {
+            "top": "1.05rem",
+            "right": "1.8rem",
+            "bottom": "1.05rem",
+            "left": "1.8rem"
+          }
+        }
+      }
+    }
+  },
+  "templateParts": [
+    {
+      "name": "header",
+      "title": "Header",
+      "area": "header"
+    },
+    {
+      "name": "footer",
+      "title": "Footer",
+      "area": "footer"
+    }
+  ]
+}

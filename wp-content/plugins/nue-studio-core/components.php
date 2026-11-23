@@ -1,0 +1,95 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+add_action( 'init', function () {
+    wp_register_script( 'nue-block-editor', plugins_url( 'editor.js', __FILE__ ), array( 'wp-blocks', 'wp-element', 'wp-server-side-render', 'wp-components' ), '1.1.0', true );
+    $blocks = array( 'services', 'pricing', 'gallery', 'team', 'testimonials', 'booking', 'contact-info', 'contact-form', 'detail', 'share', 'related-posts', 'featured-post', 'gift-link' );
+    foreach ( $blocks as $block ) {
+        register_block_type( 'nue/' . $block, array( 'api_version' => 2, 'editor_script' => 'nue-block-editor', 'render_callback' => 'nue_render_' . str_replace( '-', '_', $block ), 'attributes' => array( 'limit' => array( 'type' => 'number', 'default' => -1 ) ) ) );
+    }
+} );
+function nue_query( $type, $limit = -1, $exclude = 0 ) { return get_posts( array( 'post_type' => $type, 'posts_per_page' => $limit, 'post_status' => 'publish', 'orderby' => 'menu_order title', 'order' => 'ASC', 'exclude' => $exclude ) ); }
+function nue_photo( $id, $size = 'large' ) {
+    if ( has_post_thumbnail( $id ) ) { return get_the_post_thumbnail( $id, $size, array( 'loading' => 'lazy' ) ); }
+    if ( 'nue_artist' === get_post_type( $id ) ) { return '<div class="portrait-placeholder" aria-label="Portrait not yet available"><span aria-hidden="true">✳</span></div>'; }
+    $white = absint( $id ) % 2 === 1;
+    return '<img src="' . esc_url( get_template_directory_uri() . '/assets/images/' . ( $white ? 'hero.jpg' : 'studio.jpg' ) ) . '" alt="' . esc_attr( $white ? 'Milky white almond-shaped nails' : 'Soft pink shimmer manicure' ) . '" loading="lazy">';
+}
+function nue_button( $url, $text ) { return '<a class="nue-button" href="' . esc_url( $url ) . '">' . esc_html( $text ) . ' <span aria-hidden="true">↗</span></a>'; }
+function nue_service_booking( $id ) { $url = nue_meta( $id, 'appointment_url' ); return $url && nue_is_acuity_url( $url ) ? $url : home_url( '/booking/' ); }
+function nue_render_services( $attributes ) {
+    $posts = nue_query( 'nue_service', $attributes['limit'] ?? -1 ); if ( ! $posts ) { return '<p>Add services in the WordPress dashboard to display them here.</p>'; }
+    $html = '<div class="service-grid">';
+    foreach ( $posts as $p ) { $html .= '<article class="service-card"><a class="service-image" href="' . esc_url( get_permalink( $p ) ) . '">' . nue_photo( $p->ID, 'medium_large' ) . '</a><div class="service-card-head"><h3><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . '</a></h3><span>↗</span></div><p>' . esc_html( nue_meta( $p->ID, 'short_description', 'Thoughtful care, tailored to you.' ) ) . '</p><div class="service-meta"><span>' . esc_html( nue_meta( $p->ID, 'duration', 'Duration to be confirmed' ) ) . '</span><span>' . esc_html( nue_meta( $p->ID, 'price', 'Price on request' ) ) . '</span></div><a class="text-link" href="' . esc_url( nue_service_booking( $p->ID ) ) . '">Book now ↗</a></article>'; }
+    return $html . '</div>';
+}
+function nue_render_pricing() {
+    $terms = get_terms( array( 'taxonomy' => 'nue_service_category', 'hide_empty' => false ) ); $html = '';
+    if ( ! is_wp_error( $terms ) ) { foreach ( $terms as $term ) { $posts = get_posts( array( 'post_type' => 'nue_service', 'posts_per_page' => -1, 'post_status' => 'publish', 'tax_query' => array( array( 'taxonomy' => 'nue_service_category', 'field' => 'term_id', 'terms' => $term->term_id ) ) ) ); if ( ! $posts ) { continue; } $html .= '<section class="price-group"><h2>' . esc_html( $term->name ) . '</h2>'; foreach ( $posts as $p ) { $html .= '<div class="price-row"><div><a href="' . esc_url( get_permalink( $p ) ) . '"><strong>' . esc_html( get_the_title( $p ) ) . '</strong></a><p>' . esc_html( nue_meta( $p->ID, 'duration', 'Duration to be confirmed' ) ) . '</p></div><span>' . esc_html( nue_meta( $p->ID, 'price', 'Price on request' ) ) . '</span></div>'; } $html .= '</section>'; } }
+    return $html ?: '<p>Add services and assign service categories to build the price menu.</p>';
+}
+function nue_render_gallery( $attributes ) {
+    $posts = nue_query( 'nue_project', $attributes['limit'] ?? -1 ); $terms = get_terms( array( 'taxonomy' => 'nue_art_category', 'hide_empty' => false ) );
+    $html = '<div class="gallery-filters" aria-label="Filter nail art"><button class="is-active" type="button" data-filter="all" aria-pressed="true">All</button>';
+    if ( ! is_wp_error( $terms ) ) { foreach ( $terms as $term ) { $html .= '<button type="button" data-filter="' . esc_attr( $term->slug ) . '" aria-pressed="false">' . esc_html( $term->name ) . '</button>'; } } $html .= '</div><div class="gallery-grid">';
+    foreach ( $posts as $p ) { $categories = wp_get_post_terms( $p->ID, 'nue_art_category', array( 'fields' => 'slugs' ) ); $src = get_the_post_thumbnail_url( $p->ID, 'full' ); $html .= '<article class="gallery-card" data-categories="' . esc_attr( is_wp_error( $categories ) ? '' : implode( ' ', $categories ) ) . '">'; if ( $src ) { $html .= '<button class="lightbox-trigger" type="button" data-image="' . esc_url( $src ) . '" data-alt="' . esc_attr( get_post_meta( get_post_thumbnail_id( $p->ID ), '_wp_attachment_image_alt', true ) ) . '" aria-label="Enlarge ' . esc_attr( get_the_title( $p ) ) . '">' . nue_photo( $p->ID ) . '</button>'; } else { $html .= nue_photo( $p->ID ); } $html .= '<a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . ' ↗</a></article>'; }
+    if ( ! $posts ) { $html .= '<p>Add nail art projects and photographs to build your gallery.</p>'; }
+    return $html . '<p class="gallery-empty" role="status" hidden>No projects in this category yet. Try another filter.</p></div><dialog class="nue-lightbox" aria-label="Enlarged nail art"><button type="button" class="lightbox-close" aria-label="Close image">×</button><img src="" alt=""></dialog>';
+}
+function nue_render_team( $attributes ) {
+    $posts = nue_query( 'nue_artist', $attributes['limit'] ?? -1 ); if ( ! $posts ) { return '<p>Meet the artists soon. Team profiles can be added in the dashboard.</p>'; }
+    $html = '<div class="team-grid">'; foreach ( $posts as $p ) { $html .= '<article class="team-card"><a href="' . esc_url( get_permalink( $p ) ) . '">' . nue_photo( $p->ID ) . '</a><p class="eyebrow">' . esc_html( nue_meta( $p->ID, 'position', 'Nail artist' ) ) . '</p><h3><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . ' ↗</a></h3><p>' . esc_html( get_the_excerpt( $p ) ) . '</p></article>'; } return $html . '</div>';
+}
+function nue_render_testimonials( $attributes ) {
+    $posts = nue_query( 'nue_testimonial', $attributes['limit'] ?? -1 ); if ( ! $posts ) { return '<p>Reviews will appear here once provided by our clients.</p>'; }
+    $html = '<div class="review-grid">'; foreach ( $posts as $p ) { $rating = max( 0, min( 5, (int) nue_meta( $p->ID, 'rating', '0' ) ) ); $html .= '<blockquote class="review-card">' . ( $rating ? '<span class="stars" aria-label="' . $rating . ' out of 5 stars">' . str_repeat( '★', $rating ) . '</span>' : '' ) . '<p>“' . esc_html( wp_strip_all_tags( $p->post_content ) ) . '”</p><cite>' . esc_html( nue_meta( $p->ID, 'customer_name', get_the_title( $p ) ) ) . '</cite>' . ( 'yes' === strtolower( nue_meta( $p->ID, 'sample' ) ) ? '<small>Sample review — not a real customer testimonial</small>' : '' ) . '</blockquote>'; } return $html . '</div>';
+}
+function nue_render_booking() {
+    $url = nue_setting( 'acuity_url' ); if ( ! $url || ! nue_is_acuity_url( $url ) ) { return '<div class="notice-box"><strong>Booking is not yet configured.</strong><p>The studio owner can add an Acuity Scheduling URL under Settings → Nue Studio. Please contact the studio for appointment information.</p><a class="text-link" href="' . esc_url( home_url( '/contact/' ) ) . '">Contact us ↗</a></div>'; }
+    return '<div class="scheduler"><iframe src="' . esc_url( $url ) . '" title="Acuity appointment scheduler" loading="lazy" width="100%" height="800"></iframe><p>If the scheduler does not load, <a href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer">open Acuity scheduling in a new tab</a>.</p></div>';
+}
+function nue_render_contact_info() {
+    $html = '<div class="contact-info">'; foreach ( array( 'address' => 'Address', 'phone' => 'Phone', 'email' => 'Email', 'hours' => 'Hours' ) as $key => $label ) { $v = nue_setting( $key ); if ( ! $v ) { continue; } $html .= '<p><strong>' . esc_html( $label ) . '</strong><br>'; if ( 'email' === $key ) { $html .= '<a href="mailto:' . esc_attr( antispambot( $v ) ) . '">' . esc_html( antispambot( $v ) ) . '</a>'; } elseif ( 'phone' === $key ) { $html .= '<a href="tel:' . esc_attr( preg_replace( '/[^+0-9]/', '', $v ) ) . '">' . esc_html( $v ) . '</a>'; } else { $html .= nl2br( esc_html( $v ) ); } $html .= '</p>'; }
+    foreach ( array( 'instagram' => 'Instagram', 'facebook' => 'Facebook', 'map_url' => 'View map' ) as $key => $label ) { if ( nue_setting( $key ) ) { $html .= '<a class="social-link" href="' . esc_url( nue_setting( $key ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $label ) . ' ↗</a> '; } }
+    if ( ! nue_setting( 'address' ) && ! nue_setting( 'email' ) && ! nue_setting( 'phone' ) ) { $html .= '<p>Contact details coming soon.</p>'; } return $html . '</div>';
+}
+function nue_render_gift_link() { $url = nue_setting( 'gift_url' ); return $url ? nue_button( $url, 'Purchase a gift card' ) : '<div class="notice-box">Gift card purchasing is coming soon. The studio owner can add a provider link in Settings → Nue Studio.</div>'; }
+function nue_render_contact_form() {
+    if ( ! nue_setting( 'email' ) ) { return '<div class="notice-box">Contact form unavailable until the studio adds its email address in Settings → Nue Studio.</div>'; }
+    $status = isset( $_GET['contact'] ) ? sanitize_key( wp_unslash( $_GET['contact'] ) ) : '';
+    $notice = 'sent' === $status ? '<p role="status">Your message was sent. Thank you for getting in touch.</p>' : ( 'error' === $status ? '<p role="alert">Your message could not be sent. Please check your details and try again.</p>' : '' );
+    return $notice . '<form class="contact-form" action="' . esc_url( set_url_scheme( admin_url( 'admin-post.php' ), wp_parse_url( home_url(), PHP_URL_SCHEME ) ) ) . '" method="post"><input type="hidden" name="action" value="nue_contact">' . wp_nonce_field( 'nue_contact', 'nue_nonce', true, false ) . '<label for="nue-name">Name</label><input id="nue-name" name="name" required maxlength="100"><label for="nue-email">Email</label><input id="nue-email" name="email" type="email" required maxlength="254"><label for="nue-message">Message</label><textarea id="nue-message" name="message" required maxlength="5000" rows="6"></textarea><div class="form-trap" aria-hidden="true"><label>Leave this field empty<input name="website" tabindex="-1" autocomplete="off"></label></div><button class="nue-button" type="submit">Send message ↗</button></form>';
+}
+add_action( 'admin_post_nopriv_nue_contact', 'nue_handle_contact' ); add_action( 'admin_post_nue_contact', 'nue_handle_contact' );
+function nue_handle_contact() {
+    $ok = isset( $_POST['nue_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nue_nonce'] ) ), 'nue_contact' ) && empty( $_POST['website'] );
+    $name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : ''; $email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : ''; $message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+    $to = nue_setting( 'email' ); $ok = $ok && $name && is_email( $email ) && $message && is_email( $to ) && strlen( $message ) <= 5000;
+    if ( $ok ) { $ok = wp_mail( $to, 'Website contact from ' . $name, $message . "\n\nFrom: " . $name . ' <' . $email . '>', array( 'Reply-To: ' . $email ) ); }
+    wp_safe_redirect( add_query_arg( 'contact', $ok ? 'sent' : 'error', home_url( '/contact/' ) ) ); exit;
+}
+function nue_list( $value ) { $lines = array_filter( array_map( 'trim', explode( "\n", $value ) ) ); if ( ! $lines ) { return '<p>Details to be confirmed with the studio.</p>'; } return '<ul><li>' . implode( '</li><li>', array_map( 'esc_html', $lines ) ) . '</li></ul>'; }
+function nue_gallery_ids( $ids ) { $html = '<div class="detail-gallery">'; foreach ( array_filter( array_map( 'absint', explode( ',', $ids ) ) ) as $id ) { $html .= wp_get_attachment_image( $id, 'large', false, array( 'loading' => 'lazy' ) ); } return $html . '</div>'; }
+function nue_render_detail() {
+    $id = get_the_ID(); $type = get_post_type( $id ); $back = 'nue_service' === $type ? '/services/' : ( 'nue_artist' === $type ? '/team/' : '/nail-art/' );
+    $html = '<p class="breadcrumb"><a href="' . esc_url( home_url( '/' ) ) . '">Home</a> / <a href="' . esc_url( home_url( $back ) ) . '">Explore</a> / ' . esc_html( get_the_title( $id ) ) . '</p><div class="detail-hero"><div><p class="eyebrow">THE NUE EXPERIENCE ✳</p><h1>' . esc_html( get_the_title( $id ) ) . '</h1><div class="detail-copy">' . apply_filters( 'the_content', get_post_field( 'post_content', $id ) ) . '</div>';
+    if ( 'nue_service' === $type ) { $html .= '<p class="detail-meta">' . esc_html( nue_meta( $id, 'duration', 'Duration to be confirmed' ) ) . ' &nbsp; / &nbsp; ' . esc_html( nue_meta( $id, 'price', 'Price on request' ) ) . '</p>' . nue_button( nue_service_booking( $id ), 'Book this service' ); }
+    if ( 'nue_artist' === $type ) { $html .= '<p>' . esc_html( nue_meta( $id, 'position' ) ) . '</p>' . nue_button( home_url( '/booking/' ), 'Book an appointment' ); }
+    $html .= '</div><div class="detail-image">' . nue_photo( $id ) . '</div></div>';
+    if ( 'nue_service' === $type ) { $html .= '<div class="detail-sections">'; foreach ( array( 'benefits' => 'Benefits', 'included' => 'What is included', 'preparation' => 'Before your appointment', 'aftercare' => 'Aftercare' ) as $key => $label ) { $html .= '<section><h2>' . esc_html( $label ) . '</h2>' . ( in_array( $key, array( 'benefits', 'included' ), true ) ? nue_list( nue_meta( $id, $key ) ) : '<p>' . nl2br( esc_html( nue_meta( $id, $key, 'Details to be confirmed with the studio.' ) ) ) . '</p>' ) . '</section>'; } $html .= '</div><section class="related"><h2>Explore more services.</h2>'; $others = nue_query( 'nue_service', 3, $id ); foreach ( $others as $p ) { $html .= '<p><a class="text-link" href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . ' ↗</a></p>'; } $html .= '</section>'; }
+    if ( 'nue_artist' === $type ) { $html .= '<div class="detail-sections"><section><h2>Specialties</h2><p>' . esc_html( nue_meta( $id, 'specialties', 'Details coming soon.' ) ) . '</p></section><section><h2>Experience</h2><p>' . esc_html( nue_meta( $id, 'experience', 'Details coming soon.' ) ) . '</p></section></div>'; foreach ( array( 'instagram', 'social_url' ) as $key ) { if ( nue_meta( $id, $key ) ) { $html .= '<a class="text-link" href="' . esc_url( nue_meta( $id, $key ) ) . '" rel="noopener noreferrer">Follow the artist ↗</a>'; } } $html .= nue_gallery_ids( nue_meta( $id, 'gallery_ids' ) ); }
+    if ( 'nue_project' === $type ) { $artist = absint( nue_meta( $id, 'artist_id' ) ); if ( $artist && 'nue_artist' === get_post_type( $artist ) && 'publish' === get_post_status( $artist ) ) { $html .= '<p>Created by <a href="' . esc_url( get_permalink( $artist ) ) . '">' . esc_html( get_the_title( $artist ) ) . '</a></p>'; } $html .= nue_gallery_ids( nue_meta( $id, 'gallery_ids' ) ); }
+    return $html;
+}
+function nue_render_share() { $url = rawurlencode( get_permalink() ); $title = rawurlencode( get_the_title() ); return '<div class="share-links"><span>Share this story</span> <a href="https://www.facebook.com/sharer/sharer.php?u=' . esc_attr( $url ) . '" target="_blank" rel="noopener noreferrer">Facebook ↗</a> <a href="https://pinterest.com/pin/create/button/?url=' . esc_attr( $url ) . '&amp;description=' . esc_attr( $title ) . '" target="_blank" rel="noopener noreferrer">Pinterest ↗</a></div>'; }
+function nue_render_related_posts() { $posts = get_posts( array( 'post_type' => 'post', 'posts_per_page' => 3, 'post__not_in' => array( get_the_ID() ), 'category__in' => wp_get_post_categories( get_the_ID() ) ) ); $html = '<div class="related-posts">'; foreach ( $posts as $p ) { $html .= '<article><a href="' . esc_url( get_permalink( $p ) ) . '">' . ( has_post_thumbnail( $p ) ? get_the_post_thumbnail( $p, 'medium_large' ) : '' ) . '<h3>' . esc_html( get_the_title( $p ) ) . '</h3></a></article>'; } return $html . ( $posts ? '' : '<p>More stories coming soon.</p>' ) . '</div>'; }
+add_action( 'wp_head', function () { if ( ! is_front_page() ) { return; } $data = array( '@context' => 'https://schema.org', '@type' => 'NailSalon', 'name' => get_bloginfo( 'name' ), 'url' => home_url( '/' ) ); if ( nue_setting( 'phone' ) ) { $data['telephone'] = nue_setting( 'phone' ); } if ( nue_setting( 'address' ) ) { $data['address'] = array( '@type' => 'PostalAddress', 'streetAddress' => nue_setting( 'address' ) ); } echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . '</script>'; } );
+
+function nue_render_featured_post() {
+    $sticky = get_option( 'sticky_posts', array() );
+    $args = array( 'post_type' => 'post', 'posts_per_page' => 1, 'post_status' => 'publish', 'ignore_sticky_posts' => true );
+    if ( $sticky ) { $args['post__in'] = $sticky; }
+    $posts = get_posts( $args );
+    if ( ! $posts ) { return ''; }
+    $p = $posts[0];
+    return '<article class="featured-post"><div>' . ( has_post_thumbnail( $p ) ? get_the_post_thumbnail( $p, 'large', array( 'loading' => 'lazy' ) ) : '' ) . '</div><div><p class="eyebrow">FEATURED STORY ✳</p><h2><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . '</a></h2><p>' . esc_html( get_the_excerpt( $p ) ) . '</p><a class="text-link" href="' . esc_url( get_permalink( $p ) ) . '">Read the story ↗</a></div></article>';
+}
