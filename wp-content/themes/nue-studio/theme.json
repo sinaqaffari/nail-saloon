@@ -45,6 +45,33 @@
       "fluid": true,
       "fontFamilies": [
         {
+          "fontFamily": "\"Vazirmatn\", sans-serif",
+          "slug": "persian",
+          "name": "Vazirmatn (فارسی)",
+          "fontFace": [
+            {
+              "fontFamily": "Vazirmatn",
+              "fontStyle": "normal",
+              "fontWeight": "100 900",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/vazirmatn-arabic-wght-normal.woff2"
+              ],
+              "unicodeRange": "U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF"
+            },
+            {
+              "fontFamily": "Vazirmatn",
+              "fontStyle": "normal",
+              "fontWeight": "100 900",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/vazirmatn-latin-wght-normal.woff2"
+              ],
+              "unicodeRange": "U+0000-00FF,U+2000-206F,U+20AC,U+2191-2193"
+            }
+          ]
+        },
+        {
           "fontFamily": "\"Cormorant Garamond\", Georgia, serif",
           "slug": "editorial",
           "name": "Editorial Serif",
@@ -129,15 +156,15 @@
       "text": "var:preset|color|ink"
     },
     "typography": {
-      "fontFamily": "var:preset|font-family|sans",
+      "fontFamily": "var:preset|font-family|persian",
       "lineHeight": "1.65"
     },
     "elements": {
       "heading": {
         "typography": {
-          "fontFamily": "var:preset|font-family|editorial",
+          "fontFamily": "var:preset|font-family|persian",
           "fontWeight": "400",
-          "lineHeight": "1.08"
+          "lineHeight": "1.45"
         }
       },
       "link": {

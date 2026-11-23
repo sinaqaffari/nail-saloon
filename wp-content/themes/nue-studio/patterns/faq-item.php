@@ -5,4 +5,4 @@
  * Categories: nue-studio
  */
 ?>
-<!-- wp:details --><details class="wp-block-details"><summary>What would you like to know?</summary><!-- wp:paragraph --><p>Add your answer here.</p><!-- /wp:paragraph --></details><!-- /wp:details -->
+<!-- wp:details --><details class="wp-block-details"><summary>چه پرسشی دارید؟</summary><!-- wp:paragraph --><p>پاسخ خود را اینجا بنویسید.</p><!-- /wp:paragraph --></details><!-- /wp:details -->

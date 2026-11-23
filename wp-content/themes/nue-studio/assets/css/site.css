@@ -47,3 +47,35 @@ body:is(.nue-page-nail-art,.nue-page-team,.nue-page-gift-cards,.nue-page-faq) .p
 body:is(.nue-page-services,.nue-page-nail-art,.nue-page-about,.nue-page-team,.nue-page-booking,.nue-page-pricing,.nue-page-gift-cards,.nue-page-contact,.nue-page-faq,.nue-page-testimonials) .page-intro>.eyebrow{justify-self:start;margin-left:0!important}
 @media (min-width:768px) and (max-width:1023px){.header-book{display:none!important}}
 @media (max-width:767px){.header-inner{gap:8px!important}.brand{gap:5px!important}.brand .wp-block-site-title{font-size:1.75rem}.brand-subtitle{font-size:.41rem;max-width:48px;padding-left:6px}.header-book{display:flex!important;flex-shrink:0}.header-book .wp-block-button__link{min-height:44px;display:flex;align-items:center;white-space:nowrap;padding:.7rem .85rem;font-size:.58rem}.main-nav .wp-block-navigation__responsive-container-open{display:flex!important}.main-nav .wp-block-navigation__responsive-container:not(.is-menu-open){display:none!important}}
+
+/* Persian / RTL typography and layout: retain the editorial composition without
+   applying Latin letter-spacing or italic styling to connected Persian script. */
+html[dir="rtl"] body{font-family:var(--wp--preset--font-family--persian,"Vazirmatn",sans-serif)}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] h4{font-family:var(--wp--preset--font-family--persian,"Vazirmatn",sans-serif);letter-spacing:0;line-height:1.48;font-weight:500}
+html[dir="rtl"] h1{font-size:clamp(2.8rem,5vw,5rem)}
+html[dir="rtl"] h2{font-size:clamp(2rem,3.4vw,3.6rem)}
+html[dir="rtl"] h3{font-size:clamp(1.25rem,1.7vw,1.8rem)}
+html[dir="rtl"] h1 em,html[dir="rtl"] h2 em{font-style:normal;color:#a88b65}
+html[dir="rtl"] .eyebrow{font-family:inherit!important;font-size:.8rem!important;letter-spacing:0;line-height:1.9}
+html[dir="rtl"] .hero h1{font-size:clamp(3.1rem,5.3vw,5.3rem);line-height:1.5;letter-spacing:0}
+html[dir="rtl"] .hero-copy,html[dir="rtl"] .intro-copy{line-height:2.1}
+html[dir="rtl"] .hero-note,html[dir="rtl"] .main-nav,html[dir="rtl"] .header-book .wp-block-button__link,html[dir="rtl"] .nue-button,html[dir="rtl"] .wp-block-button__link,html[dir="rtl"] .text-link,html[dir="rtl"] .gallery-filters button{letter-spacing:0;font-family:inherit}
+html[dir="rtl"] .main-nav{font-size:.82rem}
+html[dir="rtl"] .brand .wp-block-site-title{font-family:var(--wp--preset--font-family--persian,"Vazirmatn",sans-serif);font-size:1.55rem;letter-spacing:0;font-weight:500}
+html[dir="rtl"] .brand-subtitle{border-left:0;border-right:1px solid #cbbbab;padding-left:0;padding-right:12px;letter-spacing:0;font-size:.62rem;max-width:75px}
+html[dir="rtl"] .hero-image:before{inset:-16px -16px 16px 16px}
+html[dir="rtl"] .hero-image:after{left:auto;right:-42px}
+html[dir="rtl"] .intro-image img{border-radius:44% 2px 2px 2px}
+html[dir="rtl"] .gallery-grid:has(>.gallery-card:nth-child(2):last-of-type){margin-left:auto;margin-right:0}
+html[dir="rtl"] .gallery-card>a,html[dir="rtl"] .review-card p,html[dir="rtl"] .price-row strong{font-family:inherit;letter-spacing:0}
+html[dir="rtl"] .service-card h3{font-size:1.45rem;line-height:1.6}
+html[dir="rtl"] .values-grid .wp-block-column:not(:last-child):after{right:auto;left:-30px}
+html[dir="rtl"] .footer-grid h3,html[dir="rtl"] .footer-logo{font-family:inherit;letter-spacing:0}
+html[dir="rtl"] .footer-logo{font-size:2rem!important}
+html[dir="rtl"] .notice-box{border-left:0;border-right:3px solid var(--gold)}
+html[dir="rtl"] .contact-form label,html[dir="rtl"] .detail-meta{letter-spacing:0}
+html[dir="rtl"] input[type="email"],html[dir="rtl"] input[type="url"]{direction:ltr;text-align:left}
+html[dir="rtl"] .nue-lightbox .lightbox-close{right:auto;left:7px}
+html[dir="rtl"] body:is(.nue-page-services,.nue-page-nail-art,.nue-page-about,.nue-page-team,.nue-page-booking,.nue-page-pricing,.nue-page-gift-cards,.nue-page-contact,.nue-page-faq,.nue-page-testimonials) .page-intro{text-align:right}
+html[dir="rtl"] body:is(.nue-page-services,.nue-page-nail-art,.nue-page-about,.nue-page-team,.nue-page-booking,.nue-page-pricing,.nue-page-gift-cards,.nue-page-contact,.nue-page-faq,.nue-page-testimonials) .page-intro>.eyebrow{margin-left:auto!important;margin-right:0!important}
+@media(max-width:767px){html[dir="rtl"] .hero h1{font-size:clamp(2.7rem,10vw,3.7rem);line-height:1.5}html[dir="rtl"] h1{font-size:clamp(2.3rem,9vw,3.2rem)}html[dir="rtl"] h2{font-size:clamp(1.9rem,7vw,2.7rem)}html[dir="rtl"] .brand .wp-block-site-title{font-size:1.18rem}html[dir="rtl"] .brand-subtitle{font-size:.55rem;padding-right:6px}html[dir="rtl"] .header-book .wp-block-button__link{font-size:.7rem}html[dir="rtl"] .hero-image:before{inset:-10px -10px 10px 10px}html[dir="rtl"] .hero-image:after{left:0;right:auto}}

@@ -21,3 +21,11 @@ add_filter( 'body_class', function ( $classes ) {
     }
     return $classes;
 } );
+
+// Persian is the site's frontend language even if the WordPress language pack
+// has not yet been downloaded. Admin language remains a WordPress setting.
+add_filter( 'language_attributes', function ( $attributes ) {
+    if ( is_admin() ) { return $attributes; }
+    $attributes = preg_replace( '/\s*(?:lang|dir)=["\'][^"\']*["\']/', '', $attributes );
+    return trim( $attributes . ' lang="fa-IR" dir="rtl"' );
+} );

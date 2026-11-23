@@ -43,7 +43,7 @@ In **Settings → Nue Studio**, paste the real HTTPS Acuity Scheduling URL (an `
 - **Templates:** `front-page`, `page`, `home` (blog), `index`, `archive`, `search`, `single`, `single-nue_service`, `single-nue_project`, `single-nue_artist`, `404`; reusable header and footer parts.
 - **Content types:** Services, Nail Art Projects, Team Members, Testimonials. The main Gutenberg editor stores full descriptions/biographies/review text and featured images; the details meta box stores service price, duration, short description, benefits, included items, preparation, aftercare and appointment URL; project gallery image IDs and associated artist ID; artist position, specialties, experience, gallery image IDs and social links; review attribution, rating and sample flag. Service and nail art categories are native taxonomies. Find attachment IDs in the Media Library and artist IDs in the Team Members admin URLs. Projects and team profiles accept comma-separated media IDs.
 - **Patterns:** Booking call to action, Editorial section heading, FAQ accordion item. Dynamic Gutenberg blocks render service cards and pricing from the same data, gallery and filters, team, reviews, booking, contact information and form, gift link, detail pages, article sharing, related and featured posts. Native Details blocks provide accessible FAQ disclosures. Site Editor and Gutenberg can edit the surrounding content, style settings, navigation and reusable parts.
-- **Dependencies:** WordPress only; the Cormorant Garamond and DM Sans fonts are self-hosted under their included OFL licenses. No page builder, frontend framework, font CDN, or scheduling replacement. A mail transport plugin may be needed on the host. Use a dedicated SEO plugin if Open Graph tags and richer SEO controls are desired; the theme avoids duplicating plugin metadata and the core plugin emits basic NailSalon JSON-LD on the homepage.
+- **Dependencies:** WordPress only; Vazirmatn, Cormorant Garamond and DM Sans fonts are self-hosted under their included OFL licenses. No page builder, frontend framework, font CDN, or scheduling replacement. A mail transport plugin may be needed on the host. Use a dedicated SEO plugin if Open Graph tags and richer SEO controls are desired; the theme avoids duplicating plugin metadata and the core plugin emits basic NailSalon JSON-LD on the homepage.
 
 ## Validation and launch checklist
 
@@ -52,3 +52,21 @@ The theme and plugin were activated on a disposable WordPress Playground install
 A dependency-free interaction smoke test can be run with `node tests/interactions.js`; it checks gallery filtering and lightbox open/close/focus behavior with simulated DOM objects, not an actual browser.
 
 With an installed, seeded WordPress site, run `python3 tests/wordpress-smoke.py https://your-site.example` for route/link smoke checks. This expects the starter service, supplied-photo art project and Hello World post to still exist.
+
+## Persian / RTL refresh on an existing local installation
+
+The screenshot of a narrow, unstyled-looking page is consistent with a different theme being active; confirm that **both** Nue Studio (Appearance → Themes) and Nue Studio Core (Plugins) are active. The theme loads `assets/css/site.css` directly (there is no separate `site-rtl.css` to install), and its page language/direction and Persian typography are part of the theme. The self-hosted Vazirmatn variable font is included with its OFL license. Your site title remains editable under Settings → General.
+
+To update the files in an existing Docker checkout, first back up the database and uploads, then obtain the revision containing this refresh (it must be committed and published by the repository owner before `git pull` can retrieve it). With that revision available on the current branch:
+
+```sh
+cd /path/to/nail-saloon
+git pull --ff-only
+docker compose up -d
+```
+
+Do **not** use `docker compose down -v`; that deletes the database and uploads. Open the WordPress dashboard, activate **Nue Studio Core** if needed, then choose **«فعال‌سازی قالب و تنظیم محتوای فارسی»** in its dashboard notice or Settings → Nue Studio. An administrator with permission to switch themes must run this once. It activates the Nue Studio theme, sets the site language to Persian, and updates only recognizable, unedited English starter pages, services, sample projects, sample review and starter categories. It keeps existing URLs, prices, custom content and images. Pages that were edited (including even minor edits) are skipped and should be translated manually in Pages; the result displays a count. WordPress revisions/backups are recommended before migration. WordPress may need to download the Persian language pack for its own admin controls and built-in labels to be translated. Existing content such as WordPress's default “Hello world!” post, sample page, or user-created posts is not changed; edit, translate, or remove those manually.
+
+The Site Editor stores customized templates, template parts, navigation and global styles in the database, which can override the updated theme files. Existing customizations are **never automatically deleted**. If the old header/footer or styles persist, review Appearance → Editor → Patterns / Template Parts and Styles. Export or back up your customizations first, then deliberately reset only the relevant customized part or global styles to the theme default, or translate them manually. On an existing site also check Settings → Reading (select the intended Home and Journal pages) and save Settings → Permalinks if links fail. Clear caches and hard-refresh the browser after updating.
+
+The Persian text, terms, contact details, legal placeholders, services, prices, Acuity URL and gift-card provider still need the owner's review before launch. Existing original-language custom pages and posts cannot safely be translated automatically without overwriting edits.

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Nue Studio Core
  * Description: Studio content types, editable details, booking and site components for Nue Studio.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Text Domain: nue-studio-core
@@ -12,6 +12,7 @@ define( 'NUE_CORE_DIR', plugin_dir_path( __FILE__ ) );
 require_once NUE_CORE_DIR . 'content.php';
 require_once NUE_CORE_DIR . 'components.php';
 require_once NUE_CORE_DIR . 'setup.php';
+require_once NUE_CORE_DIR . 'persian.php';
 register_activation_hook( __FILE__, 'nue_activate' );
 add_action( 'admin_menu', function () { add_options_page( 'Nue Studio Settings', 'Nue Studio', 'manage_options', 'nue-studio', 'nue_settings_page' ); } );
 add_action( 'admin_init', function () {
@@ -24,7 +25,7 @@ function nue_sanitize_settings( $input ) {
         $out[ $key ] = in_array( $key, array( 'instagram', 'facebook', 'acuity_url', 'gift_url', 'map_url' ), true ) ? esc_url_raw( $value, array( 'https' ) ) : ( 'email' === $key ? sanitize_email( $value ) : sanitize_textarea_field( $value ) );
     }
     if ( ! empty( $out['acuity_url'] ) && ! nue_is_acuity_url( $out['acuity_url'] ) ) {
-        add_settings_error( 'nue_settings', 'acuity', 'Please use an HTTPS Acuity Scheduling or as.me URL.' );
+        add_settings_error( 'nue_settings', 'acuity', 'لطفاً یک نشانی HTTPS متعلق به Acuity یا as.me وارد کنید.' );
         $out['acuity_url'] = '';
     }
     return $out;
@@ -32,8 +33,18 @@ function nue_sanitize_settings( $input ) {
 function nue_settings_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     $settings = get_option( 'nue_settings', array() );
-    $fields = array( 'acuity_url' => 'Acuity scheduler URL (https://…acuityscheduling.com or https://…as.me)', 'address' => 'Studio address', 'phone' => 'Phone', 'email' => 'Contact email', 'hours' => 'Opening hours', 'instagram' => 'Instagram URL', 'facebook' => 'Facebook URL', 'gift_url' => 'Gift card purchase URL', 'map_url' => 'Map link URL' );
-    echo '<div class="wrap"><h1>Nue Studio settings</h1><p>Enter verified business information. Empty values are shown as configuration placeholders. Do not enter API credentials.</p><form method="post" action="options.php">';
+    $fields = array( 'acuity_url' => 'Acuity scheduler URL (https://…acuityscheduling.com or https://…as.me)', 'address' => 'نشانی استودیو', 'phone' => 'تلفن', 'email' => 'ایمیل تماس', 'hours' => 'ساعات کاری', 'instagram' => 'نشانی اینستاگرام', 'facebook' => 'نشانی فیسبوک', 'gift_url' => 'نشانی خرید کارت هدیه', 'map_url' => 'نشانی نقشه' );
+    echo '<div class="wrap"><h1>تنظیمات نیو استودیو</h1>';
+    $result = get_transient( 'nue_persian_setup_result_' . get_current_user_id() );
+    if ( is_array( $result ) ) {
+        delete_transient( 'nue_persian_setup_result_' . get_current_user_id() );
+        echo '<div class="notice notice-success"><p>' . esc_html( sprintf( '%d صفحه اولیه فارسی شد؛ %d صفحه ویرایش‌شده بدون تغییر باقی ماند.', $result['updated'], $result['skipped'] ) ) . '</p></div>';
+    }
+    if ( current_user_can( 'switch_themes' ) && wp_get_theme( 'nue-studio' )->exists() ) {
+        $setup_url = wp_nonce_url( admin_url( 'admin-post.php?action=nue_apply_persian' ), 'nue_apply_persian' );
+        echo '<p><a class="button" href="' . esc_url( $setup_url ) . '">فعال‌سازی قالب و تنظیم محتوای فارسی</a> فقط محتوای اولیه ویرایش‌نشده جایگزین می‌شود.</p>';
+    }
+    echo '<p>اطلاعات تأییدشده استودیو را وارد کنید. برای سامانه رزرو نیازی به کلید API نیست.</p><form method="post" action="options.php">';
     settings_fields( 'nue_settings' ); echo '<table class="form-table">';
     foreach ( $fields as $key => $label ) { echo '<tr><th scope="row"><label for="nue-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label></th><td><input class="regular-text" id="nue-' . esc_attr( $key ) . '" name="nue_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( $settings[ $key ] ?? '' ) . '"></td></tr>'; }
     echo '</table>'; submit_button(); echo '</form></div>';
