@@ -1,0 +1,129 @@
+/* Nue Atelier — a quiet, editorial visual language for Persian type. */
+:root{--nue-paper:#f2eee6;--nue-paper-deep:#e7ddd1;--nue-ink:#302321;--nue-muted:#76665c;--nue-metal:#987c5d;--nue-line:#d1c5b7;--nue-display:"Noto Naskh Arabic","Vazirmatn",serif}
+html[dir="rtl"] body{background:var(--nue-paper);color:var(--nue-ink);font-family:"Vazirmatn",sans-serif}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] h4{font-family:var(--nue-display);font-weight:400;line-height:1.48;letter-spacing:0}
+html[dir="rtl"] p{line-height:2}
+html[dir="rtl"] h1 em,html[dir="rtl"] h2 em{color:var(--nue-metal);font-style:normal;font-weight:400}
+html[dir="rtl"] .eyebrow{color:#7d684f;font-weight:500;font-size:.78rem!important}
+html[dir="rtl"] .site-header{padding:17px clamp(24px,5vw,76px);border-bottom:1px solid var(--nue-line);background:var(--nue-paper)}
+html[dir="rtl"] .header-inner{max-width:1440px;margin:auto;min-height:66px}
+html[dir="rtl"] .brand{gap:12px!important}
+html[dir="rtl"] .brand .wp-block-site-title{font-family:var(--nue-display);font-size:2rem;font-weight:500;line-height:1.35}
+html[dir="rtl"] .brand-subtitle{border-right:1px solid #b9a997;color:#796d62;font-size:.65rem;line-height:1.6}
+html[dir="rtl"] .main-nav{font-weight:400;font-size:.83rem;gap:clamp(17px,2.3vw,34px)}
+html[dir="rtl"] .main-nav .wp-block-navigation-item__content{padding-block:8px;border-bottom:1px solid transparent;transition:border-color .2s}
+html[dir="rtl"] .main-nav .wp-block-navigation-item__content:hover{color:var(--nue-ink);border-color:var(--nue-metal)}
+html[dir="rtl"] .header-book .wp-block-button__link,html[dir="rtl"] .wp-block-button__link,html[dir="rtl"] .nue-button{font-family:"Vazirmatn",sans-serif;letter-spacing:0;text-transform:none;font-size:.79rem;font-weight:500;border-radius:2px;padding:1rem 1.8rem;min-height:48px;background:var(--nue-ink);border:1px solid var(--nue-ink);color:var(--nue-paper);transition:background .2s,color .2s,border-color .2s}
+html[dir="rtl"] .header-book .wp-block-button__link:hover,html[dir="rtl"] .wp-block-button__link:hover,html[dir="rtl"] .nue-button:hover{background:#654c40;border-color:#654c40;color:#fff}
+html[dir="rtl"] .text-link{font-family:"Vazirmatn",sans-serif;font-weight:500;letter-spacing:0;font-size:.8rem}
+html[dir="rtl"] .hero{max-width:none!important;padding:0 clamp(24px,5vw,76px)!important;border-bottom:1px solid var(--nue-line)}
+html[dir="rtl"] .hero-columns{max-width:1440px;margin:0 auto!important;min-height:670px;gap:clamp(44px,7vw,120px)!important;align-items:center}
+html[dir="rtl"] .hero-columns>.wp-block-column:first-child{padding:75px 0 54px}
+html[dir="rtl"] .hero-columns>.wp-block-column:last-child{align-self:stretch;display:flex;align-items:stretch}
+html[dir="rtl"] .hero h1{font-family:var(--nue-display);font-size:clamp(4rem,6.6vw,7rem);line-height:1.43;max-width:760px;margin:.12em 0 .2em}
+html[dir="rtl"] .hero h1 em{display:block}
+html[dir="rtl"] .hero-copy{max-width:440px;font-size:1rem;color:#685a50;line-height:2.2}
+html[dir="rtl"] .hero .wp-block-buttons{margin-top:34px}
+html[dir="rtl"] .hero-note{margin-top:62px;padding-top:18px;border-top:1px solid var(--nue-line);font-size:.72rem;letter-spacing:0;color:#7c6f64}
+html[dir="rtl"] .hero-image{width:100%;margin:0!important;position:relative}
+html[dir="rtl"] .hero-image:before{content:"";position:absolute;inset:24px -20px 24px 20px;border:1px solid #b9a58f;z-index:0;pointer-events:none}
+html[dir="rtl"] .hero-image:after{content:'✳';position:absolute;right:-26px;left:auto;bottom:25px;width:56px;height:56px;display:grid;place-items:center;border-radius:50%;background:var(--nue-paper);font-size:1.7rem;color:var(--nue-metal);z-index:2}
+html[dir="rtl"] .hero-image img{display:block;position:relative;width:100%;height:100%;min-height:670px;max-height:760px;object-fit:cover;object-position:center;border-radius:0}
+html[dir="rtl"] .content-section,html[dir="rtl"] .page-intro,html[dir="rtl"] .archive-page,html[dir="rtl"] .detail-page,html[dir="rtl"] .article-page{padding:clamp(76px,9vw,140px) clamp(24px,6vw,92px)!important}
+html[dir="rtl"] .content-section h2,html[dir="rtl"] .page-intro h1,html[dir="rtl"] .booking-banner h2,html[dir="rtl"] .gift-promo h2{letter-spacing:0;font-family:var(--nue-display);font-weight:400}
+html[dir="rtl"] .content-section h2{font-size:clamp(2.8rem,4.5vw,4.8rem);line-height:1.45}
+html[dir="rtl"] .content-section>p:not(.eyebrow),html[dir="rtl"] .page-intro>p:not(.eyebrow){line-height:2.15;color:#6b5f54}
+html[dir="rtl"] .intro-section{padding-top:clamp(80px,10vw,150px)!important}
+html[dir="rtl"] .intro-split{align-items:center;gap:clamp(55px,10vw,150px)!important}
+html[dir="rtl"] .intro-image{position:relative;margin:0}
+html[dir="rtl"] .intro-image:before{content:"";position:absolute;inset:18px 18px -18px -18px;border:1px solid #b9a58f}
+html[dir="rtl"] .intro-image img{position:relative;border-radius:0;width:100%;aspect-ratio:4/5;object-fit:cover}
+html[dir="rtl"] .intro-split .wp-block-column:nth-child(2){max-width:510px}
+html[dir="rtl"] .gallery-section,html[dir="rtl"] .review-section{background:var(--nue-paper-deep);max-width:none!important}
+html[dir="rtl"] .gallery-section:before,html[dir="rtl"] .review-section:before{border-color:#bcae9e}
+html[dir="rtl"] .gallery-grid{gap:clamp(18px,2.6vw,36px);margin-top:38px}
+html[dir="rtl"] .gallery-card:nth-child(even){transform:translateY(30px)}
+html[dir="rtl"] .gallery-card img{border-radius:0}
+html[dir="rtl"] .gallery-card>a{font-family:var(--nue-display);font-size:1.6rem;line-height:1.6}
+html[dir="rtl"] .gallery-filters{gap:8px}
+html[dir="rtl"] .gallery-filters button{font-family:inherit;letter-spacing:0;border-radius:2px;border-color:#bcae9e;padding:9px 17px}
+html[dir="rtl"] .gallery-filters button.is-active,html[dir="rtl"] .gallery-filters button:hover{background:var(--nue-ink);border-color:var(--nue-ink)}
+html[dir="rtl"] .service-grid,html[dir="rtl"] .team-grid,html[dir="rtl"] .review-grid{gap:clamp(24px,3vw,44px);margin-top:54px}
+html[dir="rtl"] .service-card{border-top:1px solid var(--nue-line);padding-top:14px}
+html[dir="rtl"] .service-image img{height:auto;aspect-ratio:4/5;object-fit:cover}
+html[dir="rtl"] .service-card h3,html[dir="rtl"] .team-card h3{font-family:var(--nue-display);font-size:2rem;line-height:1.45}
+html[dir="rtl"] .service-card-head{border-color:var(--nue-line)}
+html[dir="rtl"] .service-card p,html[dir="rtl"] .team-card p{line-height:2}
+html[dir="rtl"] .service-meta{color:#716257;line-height:1.8}
+html[dir="rtl"] .values-section{border-color:var(--nue-line)}
+html[dir="rtl"] .values-grid h3{font-family:var(--nue-display);font-size:2rem}
+html[dir="rtl"] .review-card{background:var(--nue-paper);border:1px solid #d2c3b3;padding:clamp(28px,3vw,46px)}
+html[dir="rtl"] .review-card p{font-family:var(--nue-display);font-size:1.7rem;line-height:1.65}
+html[dir="rtl"] .review-card cite{font-family:"Vazirmatn",sans-serif;letter-spacing:0}
+html[dir="rtl"] .gift-promo,html[dir="rtl"] .booking-banner{background:var(--nue-ink);color:var(--nue-paper);padding:clamp(90px,10vw,150px) 24px!important}
+html[dir="rtl"] .gift-promo h2,html[dir="rtl"] .booking-banner h2{font-size:clamp(3rem,5.5vw,5.8rem);line-height:1.4}
+html[dir="rtl"] .gift-promo .eyebrow,html[dir="rtl"] .booking-banner .eyebrow{color:#d2b99a}
+html[dir="rtl"] .gift-promo .wp-block-button__link,html[dir="rtl"] .booking-banner .wp-block-button__link{background:var(--nue-paper);border-color:var(--nue-paper);color:var(--nue-ink)}
+html[dir="rtl"] .gift-promo .wp-block-button__link:hover,html[dir="rtl"] .booking-banner .wp-block-button__link:hover{background:#d9c4ab;border-color:#d9c4ab}
+html[dir="rtl"] .wp-block-details{border-color:var(--nue-line);padding:23px 0}
+html[dir="rtl"] .wp-block-details summary{font-family:var(--nue-display);font-size:1.5rem;line-height:1.5}
+html[dir="rtl"] .page-intro{border-bottom:1px solid var(--nue-line)}
+html[dir="rtl"] body:is(.nue-page-services,.nue-page-nail-art,.nue-page-about,.nue-page-team,.nue-page-booking,.nue-page-pricing,.nue-page-gift-cards,.nue-page-contact,.nue-page-faq,.nue-page-testimonials) .page-intro{gap:0 9%;padding-top:clamp(70px,8vw,120px)!important;padding-bottom:clamp(70px,8vw,120px)!important}
+html[dir="rtl"] body:is(.nue-page-services,.nue-page-nail-art,.nue-page-about,.nue-page-team,.nue-page-booking,.nue-page-pricing,.nue-page-gift-cards,.nue-page-contact,.nue-page-faq,.nue-page-testimonials) .page-intro:after{height:360px;border-radius:0;background-position:center;background-size:cover}
+html[dir="rtl"] body:is(.nue-page-booking,.nue-page-pricing,.nue-page-contact,.nue-page-faq,.nue-page-team,.nue-page-testimonials) .page-intro:after{background:radial-gradient(ellipse at center,transparent 0 34%,#c7b5a2 34.3% 34.5%,transparent 34.8%),linear-gradient(135deg,#e6ddd1,#d8c8b9)}
+html[dir="rtl"] .page-intro h1{font-size:clamp(3.4rem,5.4vw,5.8rem);line-height:1.4}
+html[dir="rtl"] .page-intro+.content-section{padding-top:clamp(65px,7vw,100px)!important}
+html[dir="rtl"] .price-group h2,html[dir="rtl"] .detail-sections h2,html[dir="rtl"] .related h2{font-family:var(--nue-display);font-size:2.7rem}
+html[dir="rtl"] .price-row strong{font-family:var(--nue-display);font-size:1.65rem}
+html[dir="rtl"] .notice-box{background:#e8dfd3;border-color:var(--nue-metal)}
+html[dir="rtl"] .contact-form input,html[dir="rtl"] .contact-form textarea{background:#f8f5ef;border-color:#bfae9d;padding:16px}
+html[dir="rtl"] .detail-image img{border-radius:0}
+html[dir="rtl"] .detail-hero h1{font-family:var(--nue-display);font-size:clamp(3.3rem,5.4vw,5.6rem);line-height:1.4}
+html[dir="rtl"] .detail-sections{border-top:1px solid var(--nue-line);padding-top:50px}
+html[dir="rtl"] .site-footer{background:var(--nue-ink);color:var(--nue-paper)}
+html[dir="rtl"] .footer-logo{font-family:var(--nue-display);font-size:2.8rem!important;line-height:1.4}
+html[dir="rtl"] .footer-grid h3{font-family:"Vazirmatn",sans-serif;font-size:.82rem;letter-spacing:0}
+html[dir="rtl"] .footer-grid p{line-height:2.25}
+html[dir="rtl"] .footer-bottom{border-color:#6e5a4c}
+html[dir="rtl"] :focus-visible{outline:2px solid #886c4d;outline-offset:4px}
+@media(max-width:767px){
+ html[dir="rtl"] .site-header{padding:10px 20px}
+ html[dir="rtl"] .header-inner{min-height:57px}
+ html[dir="rtl"] .brand .wp-block-site-title{font-size:1.5rem}
+ html[dir="rtl"] .brand-subtitle{font-size:.52rem;padding-right:7px}
+ html[dir="rtl"] .header-book .wp-block-button__link{font-size:.68rem;padding:.65rem .8rem;min-height:44px}
+ html[dir="rtl"] .main-nav .wp-block-navigation__responsive-container.is-menu-open{padding:30px;background:var(--nue-paper);color:var(--nue-ink)}
+ html[dir="rtl"] .hero{padding:0 22px 50px!important}
+ html[dir="rtl"] .hero-columns{min-height:0;gap:24px!important}
+ html[dir="rtl"] .hero-columns>.wp-block-column:first-child{padding:54px 0 0}
+ html[dir="rtl"] .hero h1{font-size:clamp(3.3rem,13vw,4.8rem);line-height:1.4}
+ html[dir="rtl"] .hero-copy{font-size:.9rem}
+ html[dir="rtl"] .hero-note{margin-top:30px}
+ html[dir="rtl"] .hero-image{margin:12px 0 0!important}
+ html[dir="rtl"] .hero-image:before{inset:12px -10px -10px 10px}
+ html[dir="rtl"] .hero-image:after{right:auto;left:-12px;bottom:14px;width:44px;height:44px}
+ html[dir="rtl"] .hero-image img{min-height:0;height:auto;aspect-ratio:4/5;max-height:550px}
+ html[dir="rtl"] .content-section,html[dir="rtl"] .page-intro,html[dir="rtl"] .archive-page,html[dir="rtl"] .detail-page,html[dir="rtl"] .article-page{padding:75px 24px!important}
+ html[dir="rtl"] .content-section h2{font-size:clamp(2.45rem,9vw,3.4rem)}
+ html[dir="rtl"] .intro-split{gap:50px!important}
+ html[dir="rtl"] .intro-image img{aspect-ratio:1/1}
+ html[dir="rtl"] .gallery-card:nth-child(even){transform:none}
+ html[dir="rtl"] .gallery-grid:has(>.gallery-card:nth-child(2):last-of-type) .gallery-card img{height:auto;aspect-ratio:3/4}
+ html[dir="rtl"] .gallery-card>a{font-size:1.3rem}
+ html[dir="rtl"] .service-image img{height:auto;aspect-ratio:4/4}
+ html[dir="rtl"] .service-card h3{font-size:1.8rem}
+ html[dir="rtl"] body:is(.nue-page-services,.nue-page-nail-art,.nue-page-about,.nue-page-team,.nue-page-booking,.nue-page-pricing,.nue-page-gift-cards,.nue-page-contact,.nue-page-faq,.nue-page-testimonials) .page-intro{grid-template-columns:1fr;gap:0;padding-top:65px!important;padding-bottom:70px!important}
+ html[dir="rtl"] body:is(.nue-page-services,.nue-page-nail-art,.nue-page-about,.nue-page-team,.nue-page-booking,.nue-page-pricing,.nue-page-gift-cards,.nue-page-contact,.nue-page-faq,.nue-page-testimonials) .page-intro:after{height:230px;border-radius:0;margin-top:32px}
+ html[dir="rtl"] .page-intro h1{font-size:clamp(2.9rem,11vw,4rem)}
+ html[dir="rtl"] .gift-promo h2,html[dir="rtl"] .booking-banner h2{font-size:clamp(2.7rem,10vw,4rem)}
+ html[dir="rtl"] .detail-hero h1{font-size:clamp(2.9rem,10vw,4rem)}
+}
+@media(prefers-reduced-motion:reduce){html[dir="rtl"] *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
+/* The two supplied photos are examples, not nine different treatments. On the
+   service index use an editorial menu instead of repeating those placeholders.
+   Owner-supplied service photographs continue to be shown. */
+html[dir="rtl"] .nue-page-services .service-grid{counter-reset:nue-service;align-items:start}
+html[dir="rtl"] .nue-page-services .service-card{counter-increment:nue-service;min-height:245px;padding:24px 0;border-top:1px solid #a79583}
+html[dir="rtl"] .nue-page-services .service-card::before{content:'خدمت / ' counter(nue-service,persian);display:block;color:#876e54;font-size:.7rem;margin-bottom:26px}
+html[dir="rtl"] .nue-page-services .service-card.has-starter-image .service-image{display:none}
+html[dir="rtl"] .nue-page-services .service-card h3{margin:0 0 15px}

@@ -88,7 +88,7 @@ function nue_activate() {
     $fresh_pages = ! $initial_pages || ( count( $initial_pages ) === 1 && 'sample-page' === $initial_pages[0]->post_name );
     $fresh_site = $fresh_posts && $fresh_pages;
     if ( ! get_option( 'nue_seeded_v1' ) ) {
-        if ( $fresh_site ) { update_option( 'WPLANG', 'fa_IR' ); }
+        if ( $fresh_site ) { update_option( 'WPLANG', 'fa_IR' ); nue_translate_wordpress_starter_post(); nue_translate_wordpress_starter_page(); }
         foreach ( nue_page_content() as $slug => $data ) {
             $existing = get_page_by_path( $slug );
             if ( ! $existing ) {

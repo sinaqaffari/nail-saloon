@@ -8,7 +8,7 @@
         {
           "slug": "ivory",
           "name": "Ivory",
-          "color": "#f4f0e8"
+          "color": "#f2eee6"
         },
         {
           "slug": "ink",
@@ -18,7 +18,7 @@
         {
           "slug": "chocolate",
           "name": "Chocolate",
-          "color": "#291d1a"
+          "color": "#302321"
         },
         {
           "slug": "gold",
@@ -33,7 +33,7 @@
         {
           "slug": "sand",
           "name": "Sand",
-          "color": "#eae2d8"
+          "color": "#e8ded2"
         }
       ]
     },
@@ -68,6 +68,23 @@
                 "file:./assets/fonts/vazirmatn-latin-wght-normal.woff2"
               ],
               "unicodeRange": "U+0000-00FF,U+2000-206F,U+20AC,U+2191-2193"
+            }
+          ]
+        },
+        {
+          "fontFamily": "\"Noto Naskh Arabic\", \"Vazirmatn\", serif",
+          "slug": "persian-editorial",
+          "name": "نسخ — تیتر",
+          "fontFace": [
+            {
+              "fontFamily": "Noto Naskh Arabic",
+              "fontStyle": "normal",
+              "fontWeight": "400 700",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/noto-naskh-arabic-arabic-wght-normal.woff2"
+              ],
+              "unicodeRange": "U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF"
             }
           ]
         },
@@ -162,7 +179,7 @@
     "elements": {
       "heading": {
         "typography": {
-          "fontFamily": "var:preset|font-family|persian",
+          "fontFamily": "var:preset|font-family|persian-editorial",
           "fontWeight": "400",
           "lineHeight": "1.45"
         }

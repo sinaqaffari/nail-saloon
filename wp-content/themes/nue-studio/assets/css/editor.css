@@ -1,3 +1,4 @@
+@font-face{font-family:'Noto Naskh Arabic';src:url('../fonts/noto-naskh-arabic-arabic-wght-normal.woff2') format('woff2');font-style:normal;font-weight:400 700;font-display:swap}
 @font-face{font-family:Vazirmatn;src:url('../fonts/vazirmatn-arabic-wght-normal.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
 @font-face{font-family:Vazirmatn;src:url('../fonts/vazirmatn-latin-wght-normal.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F}
-.editor-styles-wrapper{font-family:Vazirmatn,sans-serif;color:#211a18;background:#f4f0e8;direction:rtl}.editor-styles-wrapper h1,.editor-styles-wrapper h2,.editor-styles-wrapper h3{font-family:Vazirmatn,sans-serif;font-weight:500;line-height:1.5}.editor-styles-wrapper em{font-style:normal}
+.editor-styles-wrapper{font-family:Vazirmatn,sans-serif;color:#211a18;background:#f4f0e8;direction:rtl}.editor-styles-wrapper h1,.editor-styles-wrapper h2,.editor-styles-wrapper h3{font-family:"Noto Naskh Arabic",Vazirmatn,serif;font-weight:400;line-height:1.5}.editor-styles-wrapper em{font-style:normal}

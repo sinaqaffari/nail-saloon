@@ -63,6 +63,11 @@ function nue_service_seed_data() {
     );
 }
 function nue_translate_starter_terms() {
+    // Keep the default category ID and slug so existing post and category URLs survive.
+    $default_category = get_term( (int) get_option( 'default_category' ), 'category' );
+    if ( $default_category && ! is_wp_error( $default_category ) && $default_category->slug === 'uncategorized' && $default_category->name === 'Uncategorized' ) {
+        wp_update_term( $default_category->term_id, 'category', array( 'name' => 'دسته‌بندی نشده', 'slug' => 'uncategorized' ) );
+    }
     $taxonomies = array(
         'nue_art_category' => array( 'classic'=>array('Classic','کلاسیک'), 'chrome'=>array('Chrome','کروم'), 'abstract'=>array('Abstract','انتزاعی'), 'minimal'=>array('Minimal','مینیمال'), 'french'=>array('French','فرنچ'), 'sculptural'=>array('Sculptural','حجمی'), 'custom'=>array('Custom','سفارشی') ),
         'nue_service_category' => array( 'manicure'=>array('Manicure','مانیکور'), 'pedicure'=>array('Pedicure','پدیکور'), 'extensions'=>array('Extensions','کاشت و اکستنشن'), 'nail-art'=>array('Nail Art','طراحی ناخن'), 'add-ons'=>array('Add-ons','خدمات تکمیلی'), 'removal'=>array('Removal','ریموو'), 'packages'=>array('Packages','پکیج‌ها') ),
@@ -75,6 +80,22 @@ function nue_translate_starter_terms() {
 function nue_starter_normalize( $content ) {
     // The first release used these image descriptions; accept either unedited version.
     return str_replace( array( 'A sheer nude manicure in warm natural light', 'A manicure in progress in a warm, serene studio', 'A thoughtful manicure ritual' ), array( 'Milky white almond-shaped nails', 'A soft pink shimmer manicure', 'Soft pink shimmering manicure' ), trim( $content ) );
+}
+/** Translate only the untouched single-site WordPress starter post. */
+function nue_translate_wordpress_starter_post() {
+    $post = get_page_by_path( 'hello-world', OBJECT, 'post' );
+    $original = "<!-- wp:paragraph -->\n<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>\n<!-- /wp:paragraph -->";
+    if ( ! $post || $post->post_title !== 'Hello world!' || $post->post_content !== $original || $post->post_excerpt !== '' ) { return false; }
+    $updated = wp_update_post( array( 'ID' => $post->ID, 'post_title' => 'به مجله نیو استودیو خوش آمدید', 'post_content' => '<!-- wp:paragraph --><p>این نخستین نوشته نمونه است. آن را ویرایش یا حذف کنید و داستان خودتان را بنویسید.</p><!-- /wp:paragraph -->' ), true );
+    return ! is_wp_error( $updated );
+}
+/** Leave edited sample pages alone; only replace the exact English core default. */
+function nue_translate_wordpress_starter_page() {
+    $page = get_page_by_path( 'sample-page' );
+    $original = '<!-- wp:paragraph -->' . "\n" . "<p>This is an example page. It's different from a blog post because it will stay in one place and will show up in your site navigation (in most themes). Most people start with an About page that introduces them to potential site visitors. It might say something like this:</p>" . "\n" . '<!-- /wp:paragraph -->' . "\n\n" . '<!-- wp:quote -->' . "\n" . "<blockquote class=\"wp-block-quote\"><p>Hi there! I'm a bike messenger by day, aspiring actor by night, and this is my website. I live in Los Angeles, have a great dog named Jack, and I like pi&#241;a coladas. (And gettin' caught in the rain.)</p></blockquote>" . "\n" . '<!-- /wp:quote -->' . "\n\n" . '<!-- wp:paragraph -->' . "\n" . '<p>...or something like this:</p>' . "\n" . '<!-- /wp:paragraph -->' . "\n\n" . '<!-- wp:quote -->' . "\n" . '<blockquote class="wp-block-quote"><p>The XYZ Doohickey Company was founded in 1971, and has been providing quality doohickeys to the public ever since. Located in Gotham City, XYZ employs over 2,000 people and does all kinds of awesome things for the Gotham community.</p></blockquote>' . "\n" . '<!-- /wp:quote -->' . "\n\n" . '<!-- wp:paragraph -->' . "\n" . '<p>As a new WordPress user, you should go to <a href="' . admin_url() . '">your dashboard</a> to delete this page and create new pages for your content. Have fun!</p>' . "\n" . '<!-- /wp:paragraph -->';
+    if ( ! $page || $page->post_title !== 'Sample Page' || $page->post_content !== $original || $page->post_excerpt !== '' ) { return false; }
+    $updated = wp_update_post( array( 'ID' => $page->ID, 'post_title' => 'صفحه نمونه', 'post_content' => '<!-- wp:paragraph --><p>این یک صفحه نمونه وردپرس است. می‌توانید آن را ویرایش یا حذف کنید و محتوای دلخواه خود را بنویسید.</p><!-- /wp:paragraph -->' ), true );
+    return ! is_wp_error( $updated );
 }
 function nue_migrate_persian_starters() {
     $updated = 0; $skipped = 0; $english = nue_english_page_content(); $persian = nue_page_content();
@@ -111,22 +132,34 @@ function nue_migrate_persian_starters() {
         }
     }
     nue_translate_starter_terms();
+    nue_translate_wordpress_starter_post();
+    nue_translate_wordpress_starter_page();
     return array( 'updated' => $updated, 'skipped' => $skipped );
+}
+/** Explicit setup shared by the dashboard button and WP-CLI. */
+function nue_apply_persian_setup() {
+    if ( get_template() !== 'nue-studio' ) { switch_theme( 'nue-studio' ); }
+    update_option( 'WPLANG', 'fa_IR' );
+    $result = nue_migrate_persian_starters();
+    $result['locale_set'] = 'fa_IR' === get_option( 'WPLANG' );
+    update_option( 'nue_persian_setup_done', 1 );
+    return $result;
 }
 add_action( 'admin_post_nue_apply_persian', function () {
     if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'switch_themes' ) ) { wp_die( esc_html__( 'You are not allowed to do this.' ) ); }
     check_admin_referer( 'nue_apply_persian' );
-    if ( wp_get_theme( 'nue-studio' )->exists() && get_template() !== 'nue-studio' ) { switch_theme( 'nue-studio' ); }
-    update_option( 'WPLANG', 'fa_IR' );
-    $result = nue_migrate_persian_starters();
-    update_option( 'nue_persian_setup_done', 1 );
+    if ( ! wp_get_theme( 'nue-studio' )->exists() ) { wp_die( 'ابتدا قالب نیو استودیو را نصب کنید.' ); }
+    $result = nue_apply_persian_setup();
     set_transient( 'nue_persian_setup_result_' . get_current_user_id(), $result, 120 );
     wp_safe_redirect( admin_url( 'options-general.php?page=nue-studio' ) ); exit;
 } );
 add_action( 'admin_notices', function () {
     if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'switch_themes' ) ) { return; }
     $wrong_theme = get_template() !== 'nue-studio';
-    if ( ! $wrong_theme && get_option( 'nue_persian_setup_done' ) ) { return; }
+    if ( ! $wrong_theme && get_option( 'nue_persian_setup_done' ) ) {
+        if ( 'fa_IR' !== get_option( 'WPLANG' ) ) { echo '<div class="notice notice-warning"><p>بسته زبان فارسی وردپرس نصب یا فعال نیست. برای ترجمه متن‌های پیش‌فرض وردپرس، در تنظیمات عمومی زبان سایت را فارسی انتخاب کنید.</p></div>'; }
+        return;
+    }
     $url = wp_nonce_url( admin_url( 'admin-post.php?action=nue_apply_persian' ), 'nue_apply_persian' );
     echo '<div class="notice notice-warning"><p><strong>نیو استودیو:</strong> برای نمایش طراحی درست و متن فارسی، قالب نیو استودیو را فعال و محتوای اولیه ترجمه‌نشده را به‌روزرسانی کنید. صفحه‌های ویرایش‌شده، قیمت‌ها و تصاویر شما تغییر نمی‌کنند.</p>';
     if ( wp_get_theme( 'nue-studio' )->exists() ) { echo '<p><a class="button button-primary" href="' . esc_url( $url ) . '">فعال‌سازی قالب و تنظیم محتوای فارسی</a></p>'; }

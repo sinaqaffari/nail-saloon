@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Nue Studio Core
  * Description: Studio content types, editable details, booking and site components for Nue Studio.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Text Domain: nue-studio-core
@@ -13,6 +13,7 @@ require_once NUE_CORE_DIR . 'content.php';
 require_once NUE_CORE_DIR . 'components.php';
 require_once NUE_CORE_DIR . 'setup.php';
 require_once NUE_CORE_DIR . 'persian.php';
+if ( defined( 'WP_CLI' ) && WP_CLI ) { require_once NUE_CORE_DIR . 'cli.php'; }
 register_activation_hook( __FILE__, 'nue_activate' );
 add_action( 'admin_menu', function () { add_options_page( 'Nue Studio Settings', 'Nue Studio', 'manage_options', 'nue-studio', 'nue_settings_page' ); } );
 add_action( 'admin_init', function () {
@@ -33,12 +34,13 @@ function nue_sanitize_settings( $input ) {
 function nue_settings_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     $settings = get_option( 'nue_settings', array() );
-    $fields = array( 'acuity_url' => 'Acuity scheduler URL (https://…acuityscheduling.com or https://…as.me)', 'address' => 'نشانی استودیو', 'phone' => 'تلفن', 'email' => 'ایمیل تماس', 'hours' => 'ساعات کاری', 'instagram' => 'نشانی اینستاگرام', 'facebook' => 'نشانی فیسبوک', 'gift_url' => 'نشانی خرید کارت هدیه', 'map_url' => 'نشانی نقشه' );
+    $fields = array( 'acuity_url' => 'نشانی سامانه رزرو Acuity (https://…acuityscheduling.com یا https://…as.me)', 'address' => 'نشانی استودیو', 'phone' => 'تلفن', 'email' => 'ایمیل تماس', 'hours' => 'ساعات کاری', 'instagram' => 'نشانی اینستاگرام', 'facebook' => 'نشانی فیسبوک', 'gift_url' => 'نشانی خرید کارت هدیه', 'map_url' => 'نشانی نقشه' );
     echo '<div class="wrap"><h1>تنظیمات نیو استودیو</h1>';
     $result = get_transient( 'nue_persian_setup_result_' . get_current_user_id() );
     if ( is_array( $result ) ) {
         delete_transient( 'nue_persian_setup_result_' . get_current_user_id() );
         echo '<div class="notice notice-success"><p>' . esc_html( sprintf( '%d صفحه اولیه فارسی شد؛ %d صفحه ویرایش‌شده بدون تغییر باقی ماند.', $result['updated'], $result['skipped'] ) ) . '</p></div>';
+        if ( empty( $result['locale_set'] ) ) { echo '<div class="notice notice-warning"><p>بسته زبان فارسی وردپرس نصب نیست. برای ترجمه بخش‌های پیش‌فرض وردپرس، از تنظیمات عمومی زبان فارسی را نصب و انتخاب کنید.</p></div>'; }
     }
     if ( current_user_can( 'switch_themes' ) && wp_get_theme( 'nue-studio' )->exists() ) {
         $setup_url = wp_nonce_url( admin_url( 'admin-post.php?action=nue_apply_persian' ), 'nue_apply_persian' );
