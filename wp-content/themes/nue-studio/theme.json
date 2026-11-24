@@ -45,6 +45,33 @@
       "fluid": true,
       "fontFamilies": [
         {
+          "fontFamily": "\"Estedad\", \"Vazirmatn\", sans-serif",
+          "slug": "persian-display",
+          "name": "Estedad — فارسی",
+          "fontFace": [
+            {
+              "fontFamily": "Estedad",
+              "fontStyle": "normal",
+              "fontWeight": "100 900",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/estedad-arabic-wght-normal.woff2"
+              ],
+              "unicodeRange": "U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF"
+            },
+            {
+              "fontFamily": "Estedad",
+              "fontStyle": "normal",
+              "fontWeight": "100 900",
+              "fontDisplay": "swap",
+              "src": [
+                "file:./assets/fonts/estedad-latin-wght-normal.woff2"
+              ],
+              "unicodeRange": "U+0000-00FF,U+2000-206F"
+            }
+          ]
+        },
+        {
           "fontFamily": "\"Vazirmatn\", sans-serif",
           "slug": "persian",
           "name": "Vazirmatn (فارسی)",
@@ -179,7 +206,7 @@
     "elements": {
       "heading": {
         "typography": {
-          "fontFamily": "var:preset|font-family|persian-editorial",
+          "fontFamily": "var:preset|font-family|persian-display",
           "fontWeight": "400",
           "lineHeight": "1.45"
         }

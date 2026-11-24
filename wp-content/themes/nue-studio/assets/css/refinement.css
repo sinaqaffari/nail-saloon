@@ -1,0 +1,96 @@
+/* A distinct, locally hosted Persian visual system. No external font requests. */
+@font-face{font-family:Estedad;src:url('../fonts/estedad-arabic-wght-normal.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Estedad;src:url('../fonts/estedad-latin-wght-normal.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F}
+:root{--nue-display:"Estedad","Vazirmatn",sans-serif;--studio-ink:#25201f;--studio-rose:#a94e65;--studio-blush:#f5e8e5;--studio-paper:#fdfbf8;--studio-line:#ded2cd}
+html[dir="rtl"] body{background:var(--studio-paper);color:var(--studio-ink);font-family:"Vazirmatn",sans-serif;font-size:16px}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] h4{font-family:var(--nue-display);font-weight:650;letter-spacing:0}
+html[dir="rtl"] h1 em,html[dir="rtl"] h2 em{color:var(--studio-rose);font-style:normal}
+html[dir="rtl"] .site-header{background:rgba(253,251,248,.97);padding:8px clamp(22px,5vw,80px);border-color:var(--studio-line)}
+html[dir="rtl"] .header-inner{min-height:70px}
+html[dir="rtl"] .brand .wp-block-site-title{font-family:"Cormorant Garamond",var(--nue-display);font-weight:600;font-size:2.3rem;letter-spacing:-.045em;line-height:1}
+html[dir="rtl"] .brand-subtitle{font-size:.7rem;color:#6f5f5a}
+html[dir="rtl"] .main-nav{font-size:.91rem;color:#554a46;font-weight:500}
+html[dir="rtl"] .header-book .wp-block-button__link,html[dir="rtl"] .wp-block-button__link,html[dir="rtl"] .nue-button{border-radius:4px;background:var(--studio-rose);border-color:var(--studio-rose);font-size:.9rem;font-weight:600;min-height:52px;padding:1rem 1.7rem}
+html[dir="rtl"] .header-book .wp-block-button__link:hover,html[dir="rtl"] .wp-block-button__link:hover,html[dir="rtl"] .nue-button:hover{background:#7e3b4d;border-color:#7e3b4d}
+html[dir="rtl"] .is-style-outline>.wp-block-button__link{background:transparent;border-color:#a88f87;color:var(--studio-ink)}
+/* Hero: a framed portrait and a smaller overlapping photograph balance the copy. */
+html[dir="rtl"] .lune-hero{background:#f6ece8;min-height:clamp(650px,calc(100vh - 86px),820px);overflow:hidden}
+html[dir="rtl"] .lune-hero>.lune-hero-copy{position:relative;padding:clamp(60px,7vw,100px) clamp(32px,6vw,90px);z-index:1}
+html[dir="rtl"] .lune-hero .section-label{font-family:Vazirmatn,sans-serif;color:#8e4f5d;font-size:.85rem;font-weight:700}
+html[dir="rtl"] .lune-hero .section-label:before{width:38px;height:2px}
+html[dir="rtl"] .lune-hero h1{font-family:var(--nue-display);font-size:clamp(3.3rem,5vw,5.4rem);font-weight:750;line-height:1.34;letter-spacing:-.025em;margin:28px 0 22px}
+html[dir="rtl"] .hero-description{font-size:1.05rem;color:#5f514d;line-height:2.25;max-width:440px}
+html[dir="rtl"] .lune-hero-actions{margin-top:32px;gap:12px}
+html[dir="rtl"] .hero-caption{font-size:.8rem;color:#7e6962;border-color:#d8c3bc;margin-top:52px;padding-top:20px}
+html[dir="rtl"] .lune-hero-media{position:relative;display:block;min-height:650px;background:#e8d8cf;padding:45px clamp(36px,5vw,80px) 45px clamp(100px,12vw,170px);overflow:hidden}
+html[dir="rtl"] .lune-hero-media:before{content:"✳";position:absolute;left:6%;top:12%;font-size:3rem;color:#a95b6d;line-height:1}
+html[dir="rtl"] .lune-hero-media .lune-hero-main{height:100%;width:100%;border-radius:220px 220px 8px 8px;overflow:hidden;box-shadow:0 20px 55px rgba(65,38,31,.14)}
+html[dir="rtl"] .lune-hero-main img{object-position:center center}
+html[dir="rtl"] .lune-hero-media .lune-hero-secondary{position:absolute;bottom:9%;left:5%;height:37%;width:35%;border:8px solid #f6ece8;border-radius:5px;box-shadow:0 18px 40px rgba(65,38,31,.2)}
+html[dir="rtl"] .lune-hero-media .lune-hero-secondary img{object-position:center}
+html[dir="rtl"] .lune-marquee{background:#a94e65;color:white;border:0;padding:14px 0}
+html[dir="rtl"] .lune-marquee-track span{font-family:var(--nue-display);font-weight:500;color:#fff;font-size:1.25rem;line-height:1.9}
+html[dir="rtl"] .lune-marquee-track b{color:#efd2d5}
+html[dir="rtl"] .lune-marquee-toggle{color:white;border-color:rgba(255,255,255,.6);background:#914257}
+/* Sections and service list. */
+html[dir="rtl"] .lune-section{padding:clamp(80px,8vw,125px) clamp(24px,7vw,110px)!important}
+html[dir="rtl"] .lune-section>.section-label{font-size:.8rem;font-weight:700;color:#9b5260;border-color:var(--studio-line);margin-bottom:38px!important}
+html[dir="rtl"] .lune-section>h2,html[dir="rtl"] .lune-faq h2{font-family:var(--nue-display);font-size:clamp(2.6rem,4vw,4rem);font-weight:750;line-height:1.5;margin-bottom:14px!important}
+html[dir="rtl"] .lune-section>.section-copy{font-size:1rem;line-height:2.1;color:#6c5c56;max-width:1280px!important}
+html[dir="rtl"] .lune-section>.wp-block-buttons{margin-top:42px!important}
+html[dir="rtl"] .lune-services{background:#fdfbf8}
+html[dir="rtl"] .lune-service-list{border-color:#cdbdb6}
+html[dir="rtl"] .lune-service-row{grid-template-columns:52px minmax(0,1fr) minmax(160px,230px) 42px;gap:22px;padding:24px 18px;border-color:#e5dcd7;transition:background .2s,border-color .2s}
+html[dir="rtl"] .lune-service-row:hover{background:#f8efeb;border-right-color:var(--studio-rose)}
+html[dir="rtl"] .lune-row-number{font-family:Estedad,sans-serif;font-size:.85rem;font-weight:700;color:#a44c60}
+html[dir="rtl"] .lune-row-main h3{font-family:var(--nue-display);font-size:1.35rem;font-weight:650;line-height:1.6}
+html[dir="rtl"] .lune-row-main p{font-size:.88rem;color:#6f605b}
+html[dir="rtl"] .lune-row-meta{font-size:.82rem;color:#6c5c56}
+html[dir="rtl"] .lune-row-arrow{width:38px;height:38px;border:1px solid #d4b9b6;border-radius:50%;display:grid;place-items:center}
+html[dir="rtl"] .lune-gallery{background:#f3eae5}
+html[dir="rtl"] .gallery-filters button{background:#fcf9f6;border:1px solid #d8c8c1;border-radius:3px;font-size:.82rem;padding:11px 18px}
+html[dir="rtl"] .gallery-filters button.is-active,html[dir="rtl"] .gallery-filters button:hover{background:var(--studio-rose);border-color:var(--studio-rose)}
+html[dir="rtl"] .lune-gallery .gallery-grid{gap:12px}
+html[dir="rtl"] .lune-gallery .gallery-card{border-radius:3px}
+html[dir="rtl"] .lune-process{background:#fdfbf8}
+html[dir="rtl"] .lune-steps{gap:18px!important}
+html[dir="rtl"] .lune-steps>.wp-block-column{background:#f7efea;border:1px solid #e8dcd5;padding:30px 25px;min-height:230px}
+html[dir="rtl"] .lune-steps .step-number{font:700 1rem Estedad,sans-serif;color:#ad5369;margin-bottom:28px}
+html[dir="rtl"] .lune-steps h3{font-family:var(--nue-display);font-size:1.4rem;font-weight:700}
+html[dir="rtl"] .lune-steps p:not(.step-number){font-size:.9rem;color:#665751}
+html[dir="rtl"] .lune-pricing{background:#f3eae5}
+html[dir="rtl"] .lune-price-cards{gap:20px}
+html[dir="rtl"] .lune-price-card{background:#fdfbf8;border:1px solid #e0d3cc;padding:38px;min-height:420px;box-shadow:0 10px 30px rgba(70,43,37,.04)}
+html[dir="rtl"] .lune-price-card.is-featured{background:#fff7f4;border-color:#b55c70;box-shadow:0 16px 40px rgba(93,45,50,.1)}
+html[dir="rtl"] .lune-price-label{color:#a4465c;font-size:.82rem;font-weight:700}
+html[dir="rtl"] .lune-price-card h3{font-family:var(--nue-display);font-size:1.7rem;font-weight:700}
+html[dir="rtl"] .lune-price-card li{font-size:.9rem;padding:15px 0;border-color:#eaded8}
+html[dir="rtl"] .lune-price-button{font-weight:700;font-size:.9rem}
+html[dir="rtl"] .lune-team{background:#fdfbf8}
+html[dir="rtl"] .lune-team .team-grid{gap:28px}
+html[dir="rtl"] .lune-team .team-card img{aspect-ratio:4/4.3;border-radius:3px}
+html[dir="rtl"] .lune-team .team-card h3{font-family:var(--nue-display);font-size:1.45rem;font-weight:700;margin:10px 0}
+html[dir="rtl"] .lune-team .team-card .eyebrow{color:#a54d62!important;font-size:.78rem!important}
+html[dir="rtl"] .lune-team .team-card p{color:#685b55;font-size:.9rem}
+html[dir="rtl"] .lune-reviews{background:#f5eae6}
+html[dir="rtl"] .lune-review-slide p{font-family:var(--nue-display);font-weight:500;font-size:clamp(1.35rem,2vw,1.8rem);line-height:2}
+html[dir="rtl"] .booking-banner{background:#a94e65;position:relative;overflow:hidden}
+html[dir="rtl"] .booking-banner:before,html[dir="rtl"] .booking-banner:after{display:block;content:"✳";position:absolute;color:rgba(255,255,255,.22);border:0;font-size:5rem;width:auto;height:auto;top:18%;left:12%;right:auto;bottom:auto}
+html[dir="rtl"] .booking-banner:after{left:auto;right:12%;top:auto;bottom:15%;font-size:3.5rem}
+html[dir="rtl"] .booking-banner h2{font-family:var(--nue-display);font-size:clamp(2.7rem,4.4vw,4.5rem);font-weight:700;line-height:1.5}
+html[dir="rtl"] .lune-faq{background:#fdfbf8}
+html[dir="rtl"] .lune-faq .wp-block-details summary{font-family:var(--nue-display);font-size:1.05rem;font-weight:600;line-height:1.8}
+html[dir="rtl"] .site-footer{background:#2b2221;color:#f7ece8}
+html[dir="rtl"] .site-footer .footer-logo{color:#f7ece8;font-family:"Cormorant Garamond",var(--nue-display);font-size:clamp(4.5rem,12vw,11rem)!important;line-height:1;letter-spacing:-.05em!important}
+html[dir="rtl"] .site-footer h3,html[dir="rtl"] .site-footer p,html[dir="rtl"] .site-footer a{color:#f3e7e2}
+html[dir="rtl"] .site-footer .footer-bottom{border-color:#665351}
+/* Shared inner pages use the same type, palette and controls. */
+html[dir="rtl"] .page-intro{background:#f6ece8}
+html[dir="rtl"] .page-intro h1,html[dir="rtl"] .detail-hero h1,html[dir="rtl"] .archive-page h1{font-family:var(--nue-display);font-weight:750;line-height:1.4}
+html[dir="rtl"] .service-card h3,html[dir="rtl"] .team-card h3,html[dir="rtl"] .price-group h2{font-family:var(--nue-display);font-weight:650}
+html[dir="rtl"] .contact-form input,html[dir="rtl"] .contact-form textarea{border-color:#cbb7ae;background:#fff}
+:focus-visible{outline:3px solid #a94e65;outline-offset:4px}
+@media(max-width:1023px){html[dir="rtl"] .lune-hero-media{min-height:520px;height:560px;padding:35px 10% 35px 25%}html[dir="rtl"] .lune-hero>.lune-hero-copy{padding:65px 7vw}html[dir="rtl"] .lune-hero-media .lune-hero-secondary{height:42%;width:30%}html[dir="rtl"] .lune-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){html[dir="rtl"] .site-header{padding:8px 20px}html[dir="rtl"] .header-inner{min-height:60px}html[dir="rtl"] .brand .wp-block-site-title{font-size:1.8rem}html[dir="rtl"] .header-book .wp-block-button__link{font-size:.72rem;min-height:44px;padding:.65rem .9rem}html[dir="rtl"] .lune-hero>.lune-hero-copy{padding:62px 25px 42px}html[dir="rtl"] .lune-hero h1{font-size:clamp(3rem,12vw,4.2rem);line-height:1.38;margin:24px 0 18px}html[dir="rtl"] .hero-description{font-size:.98rem}html[dir="rtl"] .hero-caption{margin-top:36px}html[dir="rtl"] .lune-hero-media{height:420px;min-height:0;padding:25px 13% 25px 25%}html[dir="rtl"] .lune-hero-media .lune-hero-secondary{left:4%;width:34%;height:40%;border-width:5px}html[dir="rtl"] .lune-section{padding:70px 24px!important}html[dir="rtl"] .lune-section>h2,html[dir="rtl"] .lune-faq h2{font-size:clamp(2.25rem,9vw,3rem)}html[dir="rtl"] .lune-service-row{grid-template-columns:32px minmax(0,1fr) 38px;gap:10px;padding:20px 4px}html[dir="rtl"] .lune-row-main h3{font-size:1.15rem}html[dir="rtl"] .lune-steps{grid-template-columns:1fr;gap:12px!important}html[dir="rtl"] .lune-steps>.wp-block-column{min-height:0}html[dir="rtl"] .lune-price-card{padding:28px;min-height:380px}html[dir="rtl"] .lune-team .team-card h3{font-size:1.1rem}html[dir="rtl"] .lune-team .team-card p{font-size:.8rem}html[dir="rtl"] .booking-banner h2{font-size:2.5rem}html[dir="rtl"] .booking-banner:before{left:3%;font-size:2rem}html[dir="rtl"] .booking-banner:after{right:3%;font-size:2rem}html[dir="rtl"] .site-footer .footer-logo{font-size:4.5rem!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(max-width:767px){html[dir="rtl"] .lune-hero>.lune-hero-copy{padding:42px 25px 32px}html[dir="rtl"] .lune-hero h1{font-size:clamp(2.65rem,10vw,3.5rem);line-height:1.35;margin:18px 0 14px}html[dir="rtl"] .hero-description{line-height:1.95}html[dir="rtl"] .lune-hero-actions{margin-top:20px}html[dir="rtl"] .hero-caption{display:none}}
