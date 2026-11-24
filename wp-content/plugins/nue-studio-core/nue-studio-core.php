@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Nue Studio Core
  * Description: Studio content types, editable details, booking and site components for Nue Studio.
- * Version: 1.4.0
+ * Version: 1.5.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Text Domain: nue-studio-core
@@ -26,6 +26,7 @@ function nue_sanitize_settings( $input ) {
         $value = isset( $input[ $key ] ) ? wp_unslash( $input[ $key ] ) : '';
         $out[ $key ] = in_array( $key, array( 'instagram', 'facebook', 'acuity_url', 'gift_url', 'map_url' ), true ) ? esc_url_raw( $value, array( 'https' ) ) : ( 'email' === $key ? sanitize_email( $value ) : sanitize_textarea_field( $value ) );
     }
+    $out['concept_images'] = isset( $input['concept_images'] ) && 'yes' === $input['concept_images'] ? 'yes' : 'no';
     if ( ! empty( $out['acuity_url'] ) && ! nue_is_acuity_url( $out['acuity_url'] ) ) {
         add_settings_error( 'nue_settings', 'acuity', 'لطفاً یک نشانی HTTPS متعلق به Acuity یا as.me وارد کنید.' );
         $out['acuity_url'] = '';
@@ -50,6 +51,7 @@ function nue_settings_page() {
     echo '<p>اطلاعات تأییدشده استودیو را وارد کنید. برای سامانه رزرو نیازی به کلید API نیست.</p><form method="post" action="options.php">';
     settings_fields( 'nue_settings' ); echo '<table class="form-table">';
     foreach ( $fields as $key => $label ) { echo '<tr><th scope="row"><label for="nue-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label></th><td><input class="regular-text" id="nue-' . esc_attr( $key ) . '" name="nue_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( $settings[ $key ] ?? '' ) . '"></td></tr>'; }
+    echo '<tr><th scope="row">تصاویر مفهومی نمونه</th><td><label><input type="checkbox" name="nue_settings[concept_images]" value="yes" ' . checked( nue_concept_images_enabled(), true, false ) . '> نمایش تصاویر نمونه ساخته‌شده با هوش مصنوعی در صفحه نخست، تا هنگام افزودن نمونه‌کار و هنرمند واقعی</label><p class="description">این تصاویر نمونه‌کار یا اعضای واقعی استودیو نیستند. پیش از انتشار می‌توانید آن‌ها را خاموش کنید.</p></td></tr>';
     echo '</table>'; submit_button(); echo '</form></div>';
 }
 function nue_is_acuity_url( $url ) {
@@ -59,3 +61,6 @@ function nue_is_acuity_url( $url ) {
     return (bool) preg_match( '/(^|\.)(acuityscheduling\.com|as\.me)$/', $host );
 }
 function nue_setting( $key ) { $s = get_option( 'nue_settings', array() ); return isset( $s[ $key ] ) ? $s[ $key ] : ''; }
+
+/** Illustrative visuals are clearly marked and can be disabled in settings. */
+function nue_concept_images_enabled() { $settings = get_option( 'nue_settings', array() ); return ! isset( $settings['concept_images'] ) || 'yes' === $settings['concept_images']; }

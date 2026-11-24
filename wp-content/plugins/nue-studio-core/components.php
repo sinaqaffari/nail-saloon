@@ -29,14 +29,32 @@ function nue_render_pricing() {
 }
 function nue_render_gallery( $attributes ) {
     $posts = nue_query( 'nue_project', $attributes['limit'] ?? -1 ); $terms = get_terms( array( 'taxonomy' => 'nue_art_category', 'hide_empty' => false ) );
-    $html = '<div class="gallery-filters" aria-label="فیلتر طرح‌های ناخن"><button class="is-active" type="button" data-filter="all" aria-pressed="true">همه</button>';
+    $concepts = is_front_page() && (int) ( $attributes['limit'] ?? -1 ) === 12 && nue_concept_images_enabled() ? max( 0, min( 10, 12 - count( $posts ) ) ) : 0;
+    $html = ( $concepts ? '<p class="concept-disclaimer">تصاویر مفهومیِ برچسب‌خورده با هوش مصنوعی ساخته شده‌اند و نمونه‌کار واقعی استودیو نیستند.</p>' : '' ) . '<div class="gallery-filters" aria-label="فیلتر طرح‌های ناخن"><button class="is-active" type="button" data-filter="all" aria-pressed="true">همه</button>';
     if ( ! is_wp_error( $terms ) ) { foreach ( $terms as $term ) { $html .= '<button type="button" data-filter="' . esc_attr( $term->slug ) . '" aria-pressed="false">' . esc_html( $term->name ) . '</button>'; } } $html .= '</div><div class="gallery-grid">';
     foreach ( $posts as $p ) { $categories = wp_get_post_terms( $p->ID, 'nue_art_category', array( 'fields' => 'slugs' ) ); $src = get_the_post_thumbnail_url( $p->ID, 'full' ); $html .= '<article class="gallery-card" data-categories="' . esc_attr( is_wp_error( $categories ) ? '' : implode( ' ', $categories ) ) . '">'; if ( $src ) { $html .= '<button class="lightbox-trigger" type="button" data-image="' . esc_url( $src ) . '" data-alt="' . esc_attr( get_post_meta( get_post_thumbnail_id( $p->ID ), '_wp_attachment_image_alt', true ) ) . '" aria-label="نمایش بزرگ‌تر ' . esc_attr( get_the_title( $p ) ) . '">' . nue_photo( $p->ID ) . '</button>'; } else { $html .= nue_photo( $p->ID ); } $html .= '<a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . ' ↗</a></article>'; }
-    if ( ! $posts ) { $html .= '<p>برای ساخت گالری، عکس‌ها و نمونه‌کارهای خود را اضافه کنید.</p>'; }
+    $illustrations = array(
+        array( 'مانیکور طبیعی', 'minimal classic' ), array( 'درخشش رز', 'chrome' ), array( 'خطوط آزاد', 'abstract' ), array( 'رنگ آلویی', 'classic' ), array( 'فرنچ ظریف', 'french minimal' ), array( 'طرح گیاهی', 'abstract' ), array( 'قرمز کلاسیک', 'classic' ), array( 'ابر و آبی', 'abstract' ), array( 'ابزار طراحی', 'custom' ), array( 'طرح لاک‌پشتی', 'abstract' ),
+    );
+    for ( $i = 0; $i < $concepts; $i++ ) {
+        $src = get_template_directory_uri() . '/assets/images/concept-' . str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) . '.jpg';
+        $title = $illustrations[$i][0]; $alt = 'تصویر مفهومی ساخته‌شده با هوش مصنوعی: ' . $title;
+        $html .= '<article class="gallery-card concept-card" data-categories="' . esc_attr( $illustrations[$i][1] ) . '"><button class="lightbox-trigger" type="button" data-image="' . esc_url( $src ) . '" data-alt="' . esc_attr( $alt ) . '" aria-label="' . esc_attr( 'نمایش ' . $alt ) . '"><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $alt ) . '" loading="lazy"></button><span class="concept-badge">تصویر مفهومی · هوش مصنوعی</span></article>';
+    }
+    if ( ! $posts && ! $concepts ) { $html .= '<p>برای ساخت گالری، عکس‌ها و نمونه‌کارهای خود را اضافه کنید.</p>'; }
     return $html . '<p class="gallery-empty" role="status" hidden>هنوز نمونه‌کاری در این دسته ثبت نشده است. دسته دیگری را انتخاب کنید.</p></div><dialog class="nue-lightbox" aria-label="تصویر بزرگ‌شده طرح ناخن"><button type="button" class="lightbox-close" aria-label="بستن تصویر">×</button><img src="" alt=""></dialog>';
 }
 function nue_render_team( $attributes ) {
-    $posts = nue_query( 'nue_artist', $attributes['limit'] ?? -1 ); if ( ! $posts ) { return '<p>معرفی هنرمندان استودیو به‌زودی در این بخش قرار می‌گیرد.</p>'; }
+    $posts = nue_query( 'nue_artist', $attributes['limit'] ?? -1 );
+    if ( ! $posts ) {
+        if ( ! is_front_page() || ! nue_concept_images_enabled() ) { return '<p>معرفی هنرمندان استودیو به‌زودی در این بخش قرار می‌گیرد.</p>'; }
+        $html = '<p class="concept-disclaimer">این کارت‌ها نمونه نمایشی هستند؛ تصاویر مفهومی اعضای واقعی تیم را نشان نمی‌دهند.</p><div class="team-grid">';
+        foreach ( array( 'concept-09.jpg', 'concept-01.jpg', 'concept-03.jpg' ) as $i => $image ) {
+            $url = get_template_directory_uri() . '/assets/images/' . $image;
+            $html .= '<article class="team-card team-card--placeholder"><div class="team-placeholder-image"><img src="' . esc_url( $url ) . '" alt="تصویر مفهومی ساخته‌شده با هوش مصنوعی" loading="lazy"><span>تصویر مفهومی · هوش مصنوعی</span></div><p class="eyebrow">پروفایل نمونه</p><h3>معرفی هنرمند</h3><p>نام، تصویر و تخصص هنرمند استودیو را در پیشخوان اضافه کنید.</p><div class="team-chips"><span>تخصص</span><span>نمونه‌کار</span></div></article>';
+        }
+        return $html . '</div>';
+    }
     $html = '<div class="team-grid">'; foreach ( $posts as $p ) { $html .= '<article class="team-card"><a href="' . esc_url( get_permalink( $p ) ) . '">' . nue_photo( $p->ID ) . '</a><p class="eyebrow">' . esc_html( nue_meta( $p->ID, 'position', 'هنرمند ناخن' ) ) . '</p><h3><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . ' ↗</a></h3><p>' . esc_html( get_the_excerpt( $p ) ) . '</p></article>'; } return $html . '</div>';
 }
 function nue_render_testimonials( $attributes ) {
@@ -114,9 +132,9 @@ function nue_render_pricing_preview() {
         if ( $shown >= 3 ) { break; }
         $posts = get_posts( array( 'post_type' => 'nue_service', 'posts_per_page' => 4, 'post_status' => 'publish', 'tax_query' => array( array( 'taxonomy' => 'nue_service_category', 'field' => 'term_id', 'terms' => $term->term_id ) ) ) );
         if ( ! $posts ) { continue; }
-        $html .= '<section class="lune-price-card' . ( 1 === $shown ? ' is-featured' : '' ) . '"><p class="lune-price-label">فهرست خدمات</p><h3>' . esc_html( $term->name ) . '</h3><ul>';
+        $html .= '<section class="lune-price-card' . ( 1 === $shown ? ' is-featured' : '' ) . '"><p class="lune-price-label">' . ( 1 === $shown ? 'منتخب خدمات' : 'فهرست خدمات' ) . '</p><h3>' . esc_html( $term->name ) . '</h3><ul>';
         foreach ( $posts as $post ) { $html .= '<li><a href="' . esc_url( get_permalink( $post ) ) . '">' . esc_html( get_the_title( $post ) ) . '</a><span>' . esc_html( nue_meta( $post->ID, 'price', 'با هماهنگی' ) ) . '</span></li>'; }
-        $html .= '</ul><a class="text-link" href="' . esc_url( home_url( '/pricing/' ) ) . '">جزئیات قیمت‌ها ←</a></section>'; $shown++;
+        $html .= '</ul><a class="lune-price-button" href="' . esc_url( home_url( '/booking/' ) ) . '">رزرو نوبت ←</a></section>'; $shown++;
     }
     return $html . '</div>';
 }

@@ -22,7 +22,7 @@ sample = fetch('/sample-page/').decode('utf-8')
 checks = {
     'Persian RTL document': 'lang="fa-IR" dir="rtl"' in home,
     'Persian home content': 'استودیو ناخن / زیبایی در جزئیات' in home,
-    'Editorial stylesheet': 'assets/css/lune.css?ver=1.4.0' in home,
+    'Editorial stylesheet': 'assets/css/lune.css?ver=1.5.0' in home,
     'Persian service cards': 'مانیکور کلاسیک' in services,
     'Persian WordPress starter post': 'به مجله نیو استودیو خوش آمدید' in blog and 'Hello world!' not in blog,
     'Persian WordPress sample page': 'صفحه نمونه' in sample and 'This is an example page.' not in sample,
@@ -32,6 +32,8 @@ checks = {
     'Service rows': 'lune-service-row' in home,
     'Four-step process': 'lune-steps' in home,
     'Pricing cards': 'lune-price-card' in home,
+    'Illustrative gallery clearly labelled': 'concept-card' in home and 'تصاویر مفهومیِ برچسب‌خورده با هوش مصنوعی' in home,
+    'Illustrative team placeholders': 'team-card--placeholder' in home and 'پروفایل نمونه' in home,
     'Six homepage questions': home.count('<details class="wp-block-details') == 6,
     'Booking banner': 'رزرو آنلاین' in home,
     'Local Persian display font': bool(fetch('/wp-content/themes/nue-studio/assets/fonts/noto-naskh-arabic-arabic-wght-normal.woff2')),
